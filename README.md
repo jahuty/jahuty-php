@@ -4,11 +4,11 @@ Jahuty's PHP client.
 
 ## Installation
 
-Gravity requires [PHP 7.2+](https://secure.php.net).
+This library requires [PHP 7.2+](https://secure.php.net).
 
-Gravity is multi-platform, and we strive to make it run equally well on Windows, Linux, and OSX.
+It is multi-platform, and we strive to make it run equally well on Windows, Linux, and OSX.
 
-Gravity should be installed via [Composer](https://getcomposer.org). To do so, add the following line to the `require` section of your `composer.json` file (where `x` is the latest major version), and run `composer update`:
+It should be installed via [Composer](https://getcomposer.org). To do so, add the following line to the `require` section of your `composer.json` file (where `x` is the latest major version), and run `composer update`:
 
 ```javascript
 {

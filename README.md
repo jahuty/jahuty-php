@@ -20,15 +20,15 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 
 ## Usage
 
-Use the `key()` method to set your API key:
+Use the `key()` method to set your API key (ideally, once during startup):
 
 ```php
 Snippet::key('123abc456def789ghi');
 ```
 
-Then, use the `get()` method to retrieve a snippet (be sure to cast the return value to a `string`):
+Then, use the `get()` method to retrieve a snippet (cast the return value to a `string`):
 
-```php
+```html+php
 <!doctype html>
 <html>
 <head>

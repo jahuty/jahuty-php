@@ -1,0 +1,30 @@
+{
+	"name": "jahuty/snippets-php",
+	"description": "Jahuty's PHP client",
+	"keywords": [
+		"php",
+		"jahuty",
+		"snippets"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Jack Clayton",
+			"email": "jack@jahuty.com"
+		}
+	],
+	"require": {
+		"php": "^7.2",
+        "guzzlehttp/guzzle": "^6.3"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^8.1",
+        "roave/security-advisories": "dev-master",
+        "slevomat/coding-standard": "^4"
+	},
+	"autoload": {
+		"psr-4": {
+			"Jahuty\\Snippet\\": "src/"
+		}
+	}
+}

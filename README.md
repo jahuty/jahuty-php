@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/jahuty/snippets-php.svg?style=svg)](https://circleci.com/gh/jahuty/snippets-php)
+
 # snippets-php
 
 Jahuty's PHP client.

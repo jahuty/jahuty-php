@@ -35,7 +35,7 @@ Then, use the `get()` method to retrieve a snippet (cast the return value to a `
     <title>My awesome example</title>
 </head>
 <body>
-    <?= Snippet::get(123); ?>
+    <?php echo Snippet::get(123); ?>
 </body>
 ```
 

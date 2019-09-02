@@ -4,7 +4,7 @@ Jahuty's PHP client.
 
 ## Installation
 
-This library requires [PHP 7.2+](https://secure.php.net).
+This library requires [PHP 7.3+](https://secure.php.net).
 
 It is multi-platform, and we strive to make it run equally well on Windows, Linux, and OSX.
 

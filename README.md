@@ -28,7 +28,7 @@ Snippet::key('123abc456def789ghi');
 
 Then, use the `get()` method to retrieve a snippet (cast the return value to a `string`):
 
-```html+php
+```html
 <!doctype html>
 <html>
 <head>

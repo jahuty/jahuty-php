@@ -1,11 +1,11 @@
 <?php
 
-namespace Jahuty\Snippet\Service;
+namespace Jahuty\Jahuty\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-use Jahuty\Snippet\Data\Snippet;
-use Jahuty\Snippet\Exception\NotOk;
+use Jahuty\Jahuty\Data\Snippet;
+use Jahuty\Jahuty\Exception\NotOk;
 use JsonException;
 use PHPUnit\Framework\TestCase;
 

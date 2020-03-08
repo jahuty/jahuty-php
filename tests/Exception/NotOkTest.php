@@ -1,8 +1,8 @@
 <?php
 
-namespace Jahuty\Snippet\Exception;
+namespace Jahuty\Jahuty\Exception;
 
-use Jahuty\Snippet\Data\Problem;
+use Jahuty\Jahuty\Data\Problem;
 use PHPUnit\Framework\TestCase;
 
 class NotOkTest extends TestCase

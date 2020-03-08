@@ -1,10 +1,9 @@
 {
-	"name": "jahuty/snippets-php",
-	"description": "Jahuty's PHP client",
+	"name": "jahuty/jahuty-php",
+	"description": "Jahuty's PHP SDK",
 	"keywords": [
 		"php",
-		"jahuty",
-		"snippets"
+		"jahuty"
 	],
 	"license": "MIT",
 	"authors": [
@@ -24,7 +23,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Jahuty\\Snippet\\": "src/"
+			"Jahuty\\Jahuty\\": "src/"
 		}
 	}
 }

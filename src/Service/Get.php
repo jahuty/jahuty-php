@@ -4,11 +4,11 @@
  * @license    MIT
  */
 
-namespace Jahuty\Snippet\Service;
+namespace Jahuty\Jahuty\Service;
 
 use GuzzleHttp\Client;
-use Jahuty\Snippet\Data\{Problem, Request, Snippet};
-use Jahuty\Snippet\Exception\NotOk;
+use Jahuty\Jahuty\Data\{Problem, Request, Snippet};
+use Jahuty\Jahuty\Exception\NotOk;
 
 class Get
 {

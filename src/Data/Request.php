@@ -4,7 +4,7 @@
  * @license    MIT
  */
 
-namespace Jahuty\Snippet\Data;
+namespace Jahuty\Jahuty\Data;
 
 use GuzzleHttp\Psr7\Request as Base;
 

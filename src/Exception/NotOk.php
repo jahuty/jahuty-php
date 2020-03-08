@@ -4,10 +4,10 @@
  * @license    MIT
  */
 
-namespace Jahuty\Snippet\Exception;
+namespace Jahuty\Jahuty\Exception;
 
 use Exception as PHPException;
-use Jahuty\Snippet\Data\Problem;
+use Jahuty\Jahuty\Data\Problem;
 
 /**
  * Thrown when the API responds with anything but 200.

@@ -1,8 +1,8 @@
 [![CircleCI](https://circleci.com/gh/jahuty/snippets-php.svg?style=svg)](https://circleci.com/gh/jahuty/snippets-php)
 
-# snippets-php
+# jahuty-php
 
-Jahuty's PHP client.
+Welcome to [Jahuty's](https://www.jahuty.com) server-side PHP SDK!
 
 ## Installation
 
@@ -15,7 +15,7 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 ```javascript
 {
    "require": {
-       "jahuty/snippets-php": "^x"
+       "jahuty/jahuty-php": "^x"
    }
 }
 ```

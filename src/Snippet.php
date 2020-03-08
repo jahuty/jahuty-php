@@ -4,12 +4,12 @@
  * @license    MIT
  */
 
-namespace Jahuty\Snippet;
+namespace Jahuty\Jahuty;
 
 use BadMethodCallException;
 use GuzzleHttp\Client;
-use Jahuty\Snippet\Data\Snippet as Resource;
-use Jahuty\Snippet\Service\Get;
+use Jahuty\Jahuty\Data\Snippet as Resource;
+use Jahuty\Jahuty\Service\Get;
 
 /**
  * A static wrapper for the memoized service and API key.

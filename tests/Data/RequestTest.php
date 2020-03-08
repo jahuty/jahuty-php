@@ -1,6 +1,6 @@
 <?php
 
-namespace Jahuty\Snippet\Data;
+namespace Jahuty\Jahuty\Data;
 
 use PHPUnit\Framework\TestCase;
 

@@ -12,31 +12,24 @@ use Jahuty\Jahuty\Data\Snippet as Resource;
 use Jahuty\Jahuty\Service\Get;
 
 /**
- * A static wrapper for the memoized service and API key.
+ * A static wrapper for the memoized service.
  */
 class Snippet
 {
     private static $get;
 
-    private static $key;
-
     public static function get(int $id): Resource
     {
-        if (self::$key === null) {
+        if (!Jahuty::hasKey()) {
             throw new BadMethodCallException(
-                "API key not set. Did you call Snippet::key()?"
+                "API key not set. Did you call Jahuty::setKey()?"
             );
         }
 
         if (self::$get === null) {
-            self::$get = new Get(self::$key, new Client());
+            self::$get = new Get(Jahuty::getKey(), new Client());
         }
 
         return (self::$get)($id);
-    }
-
-    public static function key(string $key): void
-    {
-        self::$key = $key;
     }
 }

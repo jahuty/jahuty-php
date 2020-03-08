@@ -2,7 +2,6 @@
 
 namespace Jahuty\Jahuty;
 
-use BadMethodCallException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 

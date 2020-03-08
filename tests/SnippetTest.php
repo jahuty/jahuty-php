@@ -3,6 +3,7 @@
 namespace Jahuty\Jahuty;
 
 use BadMethodCallException;
+use Jahuty\Jahuty\Jahuty;
 use PHPUnit\Framework\TestCase;
 
 class SnippetTest extends TestCase
@@ -16,7 +17,7 @@ class SnippetTest extends TestCase
 
     public function testGet(): void
     {
-        Snippet::key('kn2Kj5ijmT2pH6ZKqAQyNexUqKeRM4VG6DDgWN1lIcc');
+        Jahuty::setKey('kn2Kj5ijmT2pH6ZKqAQyNexUqKeRM4VG6DDgWN1lIcc');
 
         $snippet = Snippet::get(1);
 

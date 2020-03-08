@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/jahuty/snippets-php.svg?style=svg)](https://circleci.com/gh/jahuty/snippets-php)
+[![CircleCI](https://circleci.com/gh/jahuty/jahuty-php.svg?style=svg)](https://circleci.com/gh/jahuty/jahuty-php)
 
 # jahuty-php
 
@@ -20,26 +20,74 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 }
 ```
 
-## Usage
+## Configuration
 
-Use the `key()` method to set your API key (ideally, once during startup):
+Configure `Jahuty` with your [API key](https://www.jahuty.com/docs/api#authentication) (ideally, once during startup):
 
 ```php
-Snippet::key('123abc456def789ghi');
+use Jahuty\Jahuty\Jahuty;
+
+Jahuty::setKey('YOUR_API_KEY');
 ```
 
-Then, use the `get()` method to retrieve a snippet (cast the return value to a `string`):
+## Usage
 
-```html
+With the API key set, you can use the `get()` method to retrieve a snippet:
+
+```php
+use Jahuty\Jahuty\Snippet;
+
+// retrieve the snippet...
+$snippet = Snippet::get(YOUR_SNIPPET_ID);
+
+// .. and, cast it to a string...
+(string)$snippet;
+
+// ...or, access its attributes
+$snippet->getId();
+$snippet->getContent();
+```
+
+In an HTML view:
+
+```html+php
+<?php
+use Jahuty\Jahuty\Jahuty;
+use Jahuty\Jahuty\Snippet;
+
+Jahuty::setKey('YOUR_API_KEY');
+?>
 <!doctype html>
 <html>
 <head>
-    <title>My awesome example</title>
+    <title>Awesome example</title>
 </head>
 <body>
-    <?php echo Snippet::get(123); ?>
+    <?php echo Snippet::get(YOUR_SNIPPET_ID); ?>
 </body>
 ```
+
+If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown. If an error occurs with [Jahuty's API](https://www.jahuty.com/docs/api), a `NotOk` exception will be thrown:
+
+```php
+use Jahuty\Jahuty\Snippet;
+use Jahuty\Jahuty\Exception\NotOk;
+
+try {
+  Snippet::(YOUR_SNIPPET_ID);
+} catch (BadMethodCallException $e) {
+  // hmm, did you call Jahuty::setKey() first?
+} catch (NotOk $e) {
+  // hmm, the API returned something besides 2xx status code
+  $problem = $e->getProblem();
+
+  echo $problem->getStatus();  // returns status code
+  echo $problem->getType();    // returns URL to more information
+  echo $problem->getDetail();  // returns description of error
+}
+```
+
+That's it!
 
 ## License
 
@@ -53,4 +101,4 @@ This library strives to adhere to the following standards:
 2. [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 5. [Semantic Versioning 2.0](http://semver.org/spec/v2.0.0.html)
 
-If you spot an error, please let us know!
+If you spot an error, please open an issue or [let us know](https://www.jahuty.com/contacts/new)!

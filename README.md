@@ -2,7 +2,7 @@
 
 # jahuty-php
 
-Welcome to [Jahuty's](https://www.jahuty.com) server-side PHP SDK!
+Welcome to the PHP SDK for [Jahuty's API](https://www.jahuty.com/docs/api)!
 
 ## Installation
 
@@ -20,17 +20,15 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 }
 ```
 
-## Configuration
+## Usage
 
-Configure `Jahuty` with your [API key](https://www.jahuty.com/docs/api#authentication) (ideally, once during startup):
+Before use, the library needs to be configured with your [API key](https://www.jahuty.com/docs/api#authentication) (ideally, once during startup):
 
 ```php
 use Jahuty\Jahuty\Jahuty;
 
 Jahuty::setKey('YOUR_API_KEY');
 ```
-
-## Usage
 
 With the API key set, you can use the `get()` method to retrieve a snippet:
 
@@ -67,7 +65,7 @@ Jahuty::setKey('YOUR_API_KEY');
 </body>
 ```
 
-If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown. If an error occurs with [Jahuty's API](https://www.jahuty.com/docs/api), a `NotOk` exception will be thrown:
+If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown. If [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
 
 ```php
 use Jahuty\Jahuty\Snippet;

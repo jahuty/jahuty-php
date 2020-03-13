@@ -14,19 +14,16 @@ class Get
 {
     private $client;
 
-    private $key;
-
-    public function __construct(string $key, Client $client)
+    public function __construct(Client $client)
     {
-        $this->key    = $key;
         $this->client = $client;
     }
 
-    public function __invoke(int $id): Snippet
+    public function __invoke(int $id, array $params = []): Snippet
     {
-        $request = new Request($this->key, $id);
-
-        $response = $this->client->send($request);
+        $response = $this->client->request('GET', "snippets/$id", ['query' => [
+            'params' => $params
+        ]]);
 
         $payload = $response->getBody();
         $payload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);

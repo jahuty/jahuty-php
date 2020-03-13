@@ -20,9 +20,9 @@ class GetTest extends TestCase
         $response->method('getBody')->willReturn('foo');
 
         $client = $this->createMock(Client::class);
-        $client->method('send')->willReturn($response);
+        $client->method('request')->willReturn($response);
 
-        $sut = new Get('foo', $client);
+        $sut = new Get($client);
 
         $sut(1);
     }
@@ -39,9 +39,9 @@ class GetTest extends TestCase
         $response->method('getStatusCode')->willReturn(404);
 
         $client = $this->createMock(Client::class);
-        $client->method('send')->willReturn($response);
+        $client->method('request')->willReturn($response);
 
-        $sut = new Get('foo', $client);
+        $sut = new Get($client);
 
         $sut(1);
     }
@@ -56,9 +56,9 @@ class GetTest extends TestCase
         $response->method('getStatusCode')->willReturn(200);
 
         $client = $this->createMock(Client::class);
-        $client->method('send')->willReturn($response);
+        $client->method('request')->willReturn($response);
 
-        $sut = new Get('foo', $client);
+        $sut = new Get($client);
 
         $expected = new Snippet(1, 'foo');
         $actual   = $sut(1);

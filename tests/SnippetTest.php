@@ -15,6 +15,9 @@ class SnippetTest extends TestCase
         Snippet::get(1);
     }
 
+    /**
+     * @group  jack
+     */
     public function testGet(): void
     {
         Jahuty::setKey('kn2Kj5ijmT2pH6ZKqAQyNexUqKeRM4VG6DDgWN1lIcc');

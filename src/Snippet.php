@@ -7,7 +7,6 @@
 namespace Jahuty\Jahuty;
 
 use BadMethodCallException;
-use GuzzleHttp\Client;
 use Jahuty\Jahuty\Data\Snippet as Resource;
 use Jahuty\Jahuty\Service\Get;
 
@@ -18,7 +17,7 @@ class Snippet
 {
     private static $get;
 
-    public static function get(int $id): Resource
+    public static function get(int $id, array $params = []): Resource
     {
         if (!Jahuty::hasKey()) {
             throw new BadMethodCallException(
@@ -27,9 +26,9 @@ class Snippet
         }
 
         if (self::$get === null) {
-            self::$get = new Get(Jahuty::getKey(), new Client());
+            self::$get = new Get(Jahuty::getClient());
         }
 
-        return (self::$get)($id);
+        return (self::$get)($id, $params);
     }
 }

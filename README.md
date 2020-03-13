@@ -2,7 +2,7 @@
 
 # jahuty-php
 
-Welcome to [Jahuty's](https://www.jahuty.com) server-side PHP SDK!
+Welcome to the PHP SDK for [Jahuty's API](https://www.jahuty.com/docs/api)!
 
 ## Installation
 
@@ -20,17 +20,15 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 }
 ```
 
-## Configuration
+## Usage
 
-Configure `Jahuty` with your [API key](https://www.jahuty.com/docs/api#authentication) (ideally, once during startup):
+Before use, the library needs to be configured with your [API key](https://www.jahuty.com/docs/api#authentication) (ideally, once during startup):
 
 ```php
 use Jahuty\Jahuty\Jahuty;
 
 Jahuty::setKey('YOUR_API_KEY');
 ```
-
-## Usage
 
 With the API key set, you can use the `get()` method to retrieve a snippet:
 
@@ -52,8 +50,7 @@ In an HTML view:
 
 ```html+php
 <?php
-use Jahuty\Jahuty\Jahuty;
-use Jahuty\Jahuty\Snippet;
+use Jahuty\Jahuty\{Jahuty, Snippet};
 
 Jahuty::setKey('YOUR_API_KEY');
 ?>
@@ -67,7 +64,35 @@ Jahuty::setKey('YOUR_API_KEY');
 </body>
 ```
 
-If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown. If an error occurs with [Jahuty's API](https://www.jahuty.com/docs/api), a `NotOk` exception will be thrown:
+## Parameters
+
+You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet with an optional second argument:
+
+```php
+use Jahuty\Jahuty\Snippet;
+
+$snippet = Snippet::get(YOUR_SNIPPET_ID, [
+  'foo'   => 'bar',
+  'baz'   => ['qux', 'quux'],
+  'corge' => [
+    'grault' => [
+      'garply' => 'waldo'
+    ]
+  ]
+]);
+```
+
+The parameters above would be equivalent to [assigning the variables](https://www.jahuty.com/docs/assigning-a-variable) below in your snippet:
+
+```html
+{% assign foo = "bar" %}
+{% assign baz = ["qux", "quux"] %}
+{% assign corge.grault.garply = "waldo" %}
+```
+
+## Errors
+
+If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
 
 ```php
 use Jahuty\Jahuty\Snippet;

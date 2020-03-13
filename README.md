@@ -50,8 +50,7 @@ In an HTML view:
 
 ```html+php
 <?php
-use Jahuty\Jahuty\Jahuty;
-use Jahuty\Jahuty\Snippet;
+use Jahuty\Jahuty\{Jahuty, Snippet};
 
 Jahuty::setKey('YOUR_API_KEY');
 ?>
@@ -65,7 +64,35 @@ Jahuty::setKey('YOUR_API_KEY');
 </body>
 ```
 
-If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown. If [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
+## Parameters
+
+You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet with an optional second argument:
+
+```php
+use Jahuty\Jahuty\Snippet;
+
+$snippet = Snippet::get(YOUR_SNIPPET_ID, [
+  'foo'   => 'bar',
+  'baz'   => ['qux', 'quux'],
+  'corge' => [
+    'grault' => [
+      'garply' => 'waldo'
+    ]
+  ]
+]);
+```
+
+The parameters above would be equivalent to [assigning the variables](https://www.jahuty.com/docs/assigning-a-variable) below in your snippet:
+
+```html
+{% assign foo = "bar" %}
+{% assign baz = ["qux", "quux"] %}
+{% assign corge.grault.garply = "waldo" %}
+```
+
+## Errors
+
+If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
 
 ```php
 use Jahuty\Jahuty\Snippet;

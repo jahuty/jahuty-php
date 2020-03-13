@@ -7,7 +7,6 @@
 namespace Jahuty\Jahuty;
 
 use BadMethodCallException;
-use GuzzleHttp\Client;
 use Jahuty\Jahuty\Data\Snippet as Resource;
 use Jahuty\Jahuty\Service\Get;
 

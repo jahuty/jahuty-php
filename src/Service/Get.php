@@ -21,9 +21,15 @@ class Get
 
     public function __invoke(int $id, array $params = []): Snippet
     {
-        $response = $this->client->request('GET', "snippets/$id", ['query' => [
-            'params' => $params
-        ]]);
+        $options = [];
+
+        if ($params) {
+            $options['query'] = [
+                'params' => json_encode($params, JSON_THROW_ON_ERROR)
+            ];
+        }
+
+        $response = $this->client->request('GET', "snippets/$id", $options);
 
         $payload = $response->getBody();
         $payload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);

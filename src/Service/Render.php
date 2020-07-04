@@ -10,7 +10,7 @@ use GuzzleHttp\Client;
 use Jahuty\Jahuty\Data\{Problem, Request, Snippet};
 use Jahuty\Jahuty\Exception\NotOk;
 
-class Get
+class Render
 {
     private $client;
 

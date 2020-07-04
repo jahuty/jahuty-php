@@ -9,7 +9,7 @@ use Jahuty\Jahuty\Exception\NotOk;
 use JsonException;
 use PHPUnit\Framework\TestCase;
 
-class GetTest extends TestCase
+class RenderTest extends TestCase
 {
     public function testInvokeThrowsExceptionIfResponseInvalid(): void
     {
@@ -22,7 +22,7 @@ class GetTest extends TestCase
         $client = $this->createMock(Client::class);
         $client->method('request')->willReturn($response);
 
-        $sut = new Get($client);
+        $sut = new Render($client);
 
         $sut(1);
     }
@@ -41,7 +41,7 @@ class GetTest extends TestCase
         $client = $this->createMock(Client::class);
         $client->method('request')->willReturn($response);
 
-        $sut = new Get($client);
+        $sut = new Render($client);
 
         $sut(1);
     }
@@ -58,7 +58,7 @@ class GetTest extends TestCase
         $client = $this->createMock(Client::class);
         $client->method('request')->willReturn($response);
 
-        $sut = new Get($client);
+        $sut = new Render($client);
 
         $expected = new Snippet(1, 'foo');
         $actual   = $sut(1);

@@ -8,7 +8,7 @@ namespace Jahuty\Jahuty;
 
 use BadMethodCallException;
 use Jahuty\Jahuty\Data\Snippet as Resource;
-use Jahuty\Jahuty\Service\Get;
+use Jahuty\Jahuty\Service\Render;
 
 /**
  * A static wrapper for the memoized service.
@@ -26,7 +26,7 @@ class Snippet
         }
 
         if (self::$get === null) {
-            self::$get = new Get(Jahuty::getClient());
+            self::$get = new Render(Jahuty::getClient());
         }
 
         return (self::$get)($id, $params);

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Rename `Get` service to `Render`.
 - Rename `Snippet::get` to `Snippet::render`.
+- Change the optional second argument of `render()` from an array of `params` to an options array with a `params` key.
 
 ## 3.1.1 - 2020-03-15
 

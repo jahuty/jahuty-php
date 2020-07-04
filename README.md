@@ -66,17 +66,19 @@ Jahuty::setKey('YOUR_API_KEY');
 
 ## Parameters
 
-You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet with an optional second argument:
+You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet using the options associative array:
 
 ```php
 use Jahuty\Jahuty\Snippet;
 
 $snippet = Snippet::get(YOUR_SNIPPET_ID, [
-  'foo'   => 'bar',
-  'baz'   => ['qux', 'quux'],
-  'corge' => [
-    'grault' => [
-      'garply' => 'waldo'
+  'params' => [
+    'foo'   => 'bar',
+    'baz'   => ['qux', 'quux'],
+    'corge' => [
+      'grault' => [
+        'garply' => 'waldo'
+      ]
     ]
   ]
 ]);

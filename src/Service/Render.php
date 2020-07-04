@@ -19,17 +19,17 @@ class Render
         $this->client = $client;
     }
 
-    public function __invoke(int $id, array $params = []): Snippet
+    public function __invoke(int $id, array $options = []): Snippet
     {
-        $options = [];
+        $settings = [];
 
-        if ($params) {
-            $options['query'] = [
-                'params' => json_encode($params, JSON_THROW_ON_ERROR)
+        if (array_key_exists('params', $options)) {
+            $settings['query'] = [
+                'params' => json_encode($options['params'], JSON_THROW_ON_ERROR)
             ];
         }
 
-        $response = $this->client->request('GET', "snippets/$id", $options);
+        $response = $this->client->request('GET', "snippets/$id", $settings);
 
         $payload = $response->getBody();
         $payload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);

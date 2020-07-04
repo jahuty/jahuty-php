@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 4.0.0 - 2020-07-04
 
 - Rename `Get` service to `Render`.
+- Rename `Snippet::get` to `Snippet::render`.
 
 ## 3.1.1 - 2020-03-15
 

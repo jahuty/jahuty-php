@@ -35,8 +35,8 @@ With the API key set, you can use the `get()` method to retrieve a snippet:
 ```php
 use Jahuty\Jahuty\Snippet;
 
-// retrieve the snippet...
-$snippet = Snippet::get(YOUR_SNIPPET_ID);
+// render the snippet...
+$snippet = Snippet::render(YOUR_SNIPPET_ID);
 
 // .. and, cast it to a string...
 (string)$snippet;

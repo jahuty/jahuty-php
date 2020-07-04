@@ -17,7 +17,7 @@ class Snippet
 {
     private static $get;
 
-    public static function get(int $id, array $params = []): Resource
+    public static function render(int $id, array $params = []): Resource
     {
         if (!Jahuty::hasKey()) {
             throw new BadMethodCallException(

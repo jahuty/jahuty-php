@@ -12,14 +12,14 @@ class SnippetTest extends TestCase
     {
         $this->expectException(BadMethodCallException::class);
 
-        Snippet::get(1);
+        Snippet::render(1);
     }
 
     public function testGet(): void
     {
         Jahuty::setKey('kn2Kj5ijmT2pH6ZKqAQyNexUqKeRM4VG6DDgWN1lIcc');
 
-        $snippet = Snippet::get(1);
+        $snippet = Snippet::render(1);
 
         $this->assertEquals(1, $snippet->getId());
         $this->assertEquals('This is my first snippet!', $snippet->getContent());

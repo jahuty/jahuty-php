@@ -29,7 +29,7 @@ class Render
             ];
         }
 
-        $response = $this->client->request('GET', "snippets/$id", $settings);
+        $response = $this->client->request('GET', "snippets/$id/render", $settings);
 
         $payload = $response->getBody();
         $payload = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);

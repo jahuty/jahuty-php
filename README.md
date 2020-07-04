@@ -30,20 +30,19 @@ use Jahuty\Jahuty\Jahuty;
 Jahuty::setKey('YOUR_API_KEY');
 ```
 
-With the API key set, you can use the `get()` method to retrieve a snippet:
+With the API key set, you can use the `Snippet::render()` method to render a snippet:
 
 ```php
 use Jahuty\Jahuty\Snippet;
 
-// retrieve the snippet...
-$snippet = Snippet::get(YOUR_SNIPPET_ID);
+// render the snippet...
+$render = Snippet::render(YOUR_SNIPPET_ID);
 
 // .. and, cast it to a string...
-(string)$snippet;
+(string)$render;
 
-// ...or, access its attributes
-$snippet->getId();
-$snippet->getContent();
+// ...or, access its content
+$render->getContent();
 ```
 
 In an HTML view:
@@ -60,23 +59,25 @@ Jahuty::setKey('YOUR_API_KEY');
     <title>Awesome example</title>
 </head>
 <body>
-    <?php echo Snippet::get(YOUR_SNIPPET_ID); ?>
+    <?php echo Snippet::render(YOUR_SNIPPET_ID); ?>
 </body>
 ```
 
 ## Parameters
 
-You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet with an optional second argument:
+You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet using the optional options hash and the `params` key:
 
 ```php
 use Jahuty\Jahuty\Snippet;
 
-$snippet = Snippet::get(YOUR_SNIPPET_ID, [
-  'foo'   => 'bar',
-  'baz'   => ['qux', 'quux'],
-  'corge' => [
-    'grault' => [
-      'garply' => 'waldo'
+$render = Snippet::render(YOUR_SNIPPET_ID, [
+  'params' => [
+    'foo'   => 'bar',
+    'baz'   => ['qux', 'quux'],
+    'corge' => [
+      'grault' => [
+        'garply' => 'waldo'
+      ]
     ]
   ]
 ]);
@@ -92,14 +93,14 @@ The parameters above would be equivalent to [assigning the variables](https://ww
 
 ## Errors
 
-If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
+If you don't set your API key before calling `Snippet::render()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
 
 ```php
 use Jahuty\Jahuty\Snippet;
 use Jahuty\Jahuty\Exception\NotOk;
 
 try {
-  Snippet::(YOUR_SNIPPET_ID);
+  $render = Snippet::render(YOUR_SNIPPET_ID);
 } catch (BadMethodCallException $e) {
   // hmm, did you call Jahuty::setKey() first?
 } catch (NotOk $e) {

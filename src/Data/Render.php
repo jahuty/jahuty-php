@@ -8,7 +8,7 @@ namespace Jahuty\Jahuty\Data;
 
 use BadMethodCallException;
 
-class Snippet
+class Render
 {
     private $content;
 
@@ -20,7 +20,7 @@ class Snippet
         $this->content = $content;
     }
 
-    public static function from(array $payload): Snippet
+    public static function from(array $payload): Render
     {
         if (!array_key_exists('id', $payload)) {
             throw new BadMethodCallException("Key 'id' does not exist");
@@ -30,7 +30,7 @@ class Snippet
             throw new BadMethodCallException("Key 'content' does not exist");
         }
 
-        return new Snippet($payload['id'], $payload['content']);
+        return new Render($payload['id'], $payload['content']);
     }
 
     public function __toString(): string

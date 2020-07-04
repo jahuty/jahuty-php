@@ -4,7 +4,7 @@ namespace Jahuty\Jahuty\Service;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
-use Jahuty\Jahuty\Data\Snippet;
+use Jahuty\Jahuty\Data\Render as Resource;
 use Jahuty\Jahuty\Exception\NotOk;
 use JsonException;
 use PHPUnit\Framework\TestCase;
@@ -60,7 +60,7 @@ class RenderTest extends TestCase
 
         $sut = new Render($client);
 
-        $expected = new Snippet(1, 'foo');
+        $expected = new Resource(1, 'foo');
         $actual   = $sut(1);
 
         $this->assertEquals($expected, $actual);

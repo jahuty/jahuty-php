@@ -7,7 +7,7 @@
 namespace Jahuty\Jahuty\Service;
 
 use GuzzleHttp\Client;
-use Jahuty\Jahuty\Data\{Problem, Request, Snippet};
+use Jahuty\Jahuty\Data\{Problem, Render as Resource};
 use Jahuty\Jahuty\Exception\NotOk;
 
 class Render
@@ -19,7 +19,7 @@ class Render
         $this->client = $client;
     }
 
-    public function __invoke(int $id, array $options = []): Snippet
+    public function __invoke(int $id, array $options = []): Resource
     {
         $settings = [];
 
@@ -38,6 +38,6 @@ class Render
             throw new NotOk(Problem::from($payload));
         }
 
-        return Snippet::from($payload);
+        return Resource::from($payload);
     }
 }

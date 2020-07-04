@@ -100,7 +100,7 @@ use Jahuty\Jahuty\Snippet;
 use Jahuty\Jahuty\Exception\NotOk;
 
 try {
-  Snippet::(YOUR_SNIPPET_ID);
+  Snippet::render(YOUR_SNIPPET_ID);
 } catch (BadMethodCallException $e) {
   // hmm, did you call Jahuty::setKey() first?
 } catch (NotOk $e) {

@@ -7,7 +7,7 @@
 namespace Jahuty\Jahuty;
 
 use BadMethodCallException;
-use Jahuty\Jahuty\Data\Snippet as Resource;
+use Jahuty\Jahuty\Data\Render as Resource;
 use Jahuty\Jahuty\Service\Render;
 
 /**

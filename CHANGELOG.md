@@ -5,10 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## 4.0.0 - 2020-07-04
 
-- Rename `Get` service to `Render`.
+- Rename `Serivce\Get` to `Service\Render`.
 - Rename `Snippet::get` to `Snippet::render`.
 - Change the optional second argument of `render()` from an array of `params` to an options array with a `params` key.
 - Rename `Data\Snippet` to `Data\Render`.
+- Remove `id` attribute from `Data\Render`.
 
 ## 3.1.1 - 2020-03-15
 

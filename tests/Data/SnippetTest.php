@@ -11,16 +11,7 @@ class RenderTest extends TestCase
 
     public function setUp(): void
     {
-        $this->payload = ['id' => 1, 'content' => 'foo'];
-    }
-
-    public function testFromThrowsExceptionIfIdDoesNotExist(): void
-    {
-        $this->expectException(BadMethodCallException::class);
-
-        unset($this->payload['id']);
-
-        Render::from($this->payload);
+        $this->payload = ['content' => 'foo'];
     }
 
     public function testFromThrowsExceptionIfContentsDoesNotExist(): void
@@ -34,7 +25,7 @@ class RenderTest extends TestCase
 
     public function testFrom(): void
     {
-        $expected = new Render(1, 'foo');
+        $expected = new Render('foo');
         $actual   = Render::from($this->payload);
 
         $this->assertEquals($expected, $actual);
@@ -42,16 +33,11 @@ class RenderTest extends TestCase
 
     public function testGetContent(): void
     {
-        $this->assertEquals('foo', (new Render(1, 'foo'))->getContent());
-    }
-
-    public function testGetId(): void
-    {
-        $this->assertEquals(1, (new Render(1, 'foo'))->getId());
+        $this->assertEquals('foo', (new Render('foo'))->getContent());
     }
 
     public function testToString(): void
     {
-        $this->assertEquals('foo', (string)new Render(1, 'foo'));
+        $this->assertEquals('foo', (string)new Render('foo'));
     }
 }

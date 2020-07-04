@@ -49,7 +49,7 @@ class RenderTest extends TestCase
     public function testInvokeIfOk(): void
     {
         // mock a valid response
-        $body = '{"id": 1, "content":"foo"}';
+        $body = '{"content":"foo"}';
 
         $response = $this->createMock(Response::class);
         $response->method('getBody')->willReturn($body);
@@ -60,7 +60,7 @@ class RenderTest extends TestCase
 
         $sut = new Render($client);
 
-        $expected = new Resource(1, 'foo');
+        $expected = new Resource('foo');
         $actual   = $sut(1);
 
         $this->assertEquals($expected, $actual);

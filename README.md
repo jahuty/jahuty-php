@@ -30,19 +30,19 @@ use Jahuty\Jahuty\Jahuty;
 Jahuty::setKey('YOUR_API_KEY');
 ```
 
-With the API key set, you can use the `render()` method to retrieve a snippet:
+With the API key set, you can use the `Snippet::render()` method to render a snippet:
 
 ```php
 use Jahuty\Jahuty\Snippet;
 
 // render the snippet...
-$snippet = Snippet::render(YOUR_SNIPPET_ID);
+$render = Snippet::render(YOUR_SNIPPET_ID);
 
 // .. and, cast it to a string...
-(string)$snippet;
+(string)$render;
 
 // ...or, access its content
-$snippet->getContent();
+$render->getContent();
 ```
 
 In an HTML view:
@@ -65,12 +65,12 @@ Jahuty::setKey('YOUR_API_KEY');
 
 ## Parameters
 
-You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet using the options associative array:
+You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet using the optional options hash and the `params` key:
 
 ```php
 use Jahuty\Jahuty\Snippet;
 
-$snippet = Snippet::render(YOUR_SNIPPET_ID, [
+$render = Snippet::render(YOUR_SNIPPET_ID, [
   'params' => [
     'foo'   => 'bar',
     'baz'   => ['qux', 'quux'],
@@ -100,7 +100,7 @@ use Jahuty\Jahuty\Snippet;
 use Jahuty\Jahuty\Exception\NotOk;
 
 try {
-  Snippet::render(YOUR_SNIPPET_ID);
+  $render = Snippet::render(YOUR_SNIPPET_ID);
 } catch (BadMethodCallException $e) {
   // hmm, did you call Jahuty::setKey() first?
 } catch (NotOk $e) {

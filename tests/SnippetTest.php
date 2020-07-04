@@ -21,7 +21,6 @@ class SnippetTest extends TestCase
 
         $snippet = Snippet::render(1);
 
-        $this->assertEquals(1, $snippet->getId());
         $this->assertEquals('This is my first snippet!', $snippet->getContent());
     }
 }

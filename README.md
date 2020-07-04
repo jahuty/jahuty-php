@@ -30,7 +30,7 @@ use Jahuty\Jahuty\Jahuty;
 Jahuty::setKey('YOUR_API_KEY');
 ```
 
-With the API key set, you can use the `get()` method to retrieve a snippet:
+With the API key set, you can use the `render()` method to retrieve a snippet:
 
 ```php
 use Jahuty\Jahuty\Snippet;
@@ -41,8 +41,7 @@ $snippet = Snippet::render(YOUR_SNIPPET_ID);
 // .. and, cast it to a string...
 (string)$snippet;
 
-// ...or, access its attributes
-$snippet->getId();
+// ...or, access its content
 $snippet->getContent();
 ```
 
@@ -60,7 +59,7 @@ Jahuty::setKey('YOUR_API_KEY');
     <title>Awesome example</title>
 </head>
 <body>
-    <?php echo Snippet::get(YOUR_SNIPPET_ID); ?>
+    <?php echo Snippet::render(YOUR_SNIPPET_ID); ?>
 </body>
 ```
 
@@ -71,7 +70,7 @@ You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into 
 ```php
 use Jahuty\Jahuty\Snippet;
 
-$snippet = Snippet::get(YOUR_SNIPPET_ID, [
+$snippet = Snippet::render(YOUR_SNIPPET_ID, [
   'params' => [
     'foo'   => 'bar',
     'baz'   => ['qux', 'quux'],
@@ -94,7 +93,7 @@ The parameters above would be equivalent to [assigning the variables](https://ww
 
 ## Errors
 
-If you don't set your API key before calling `Snippet::get()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
+If you don't set your API key before calling `Snippet::render()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
 
 ```php
 use Jahuty\Jahuty\Snippet;

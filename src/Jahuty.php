@@ -13,7 +13,7 @@ use GuzzleHttp\Client;
  */
 class Jahuty
 {
-    public const VERSION = "3.1.0";
+    public const VERSION = "4.1.0";
 
     private const HEADERS = [
         'Accept'          => 'application/json;q=0.9,*/*;q=0.8',
@@ -22,7 +22,7 @@ class Jahuty
         'User-Agent'      => "Jahuty PHP SDK v{self::VERSION}"
     ];
 
-    private const BASE_URI = 'https://www.jahuty.com/api/';
+    private const BASE_URI = 'https://api.jahuty.com/';
 
     private static $client;
 

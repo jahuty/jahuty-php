@@ -2,7 +2,7 @@
 
 # jahuty-php
 
-Welcome to the PHP SDK for [Jahuty's API](https://www.jahuty.com/docs/api)!
+Welcome to the PHP SDK for [Jahuty's API](https://docs.jahuty.com/api)!
 
 ## Installation
 
@@ -22,7 +22,7 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 
 ## Usage
 
-Before use, the library needs to be configured with your [API key](https://www.jahuty.com/docs/api#authentication) (ideally, once during startup):
+Before use, the library needs to be configured with your [API key](https://docs.jahuty.com/api#authentication) (ideally, once during startup):
 
 ```php
 use Jahuty\Jahuty\Jahuty;
@@ -65,7 +65,7 @@ Jahuty::setKey('YOUR_API_KEY');
 
 ## Parameters
 
-You can [pass parameters](https://www.jahuty.com/docs/passing-a-parameter) into your snippet using the optional options hash and the `params` key:
+You can [pass parameters](https://docs.jahuty.com/liquid/parameters) into your snippet using the optional options hash and the `params` key:
 
 ```php
 use Jahuty\Jahuty\Snippet;
@@ -73,7 +73,7 @@ use Jahuty\Jahuty\Snippet;
 $render = Snippet::render(YOUR_SNIPPET_ID, ['params' => ['foo' => 'bar']]);
 ```
 
-The parameters above would be equivalent to [assigning the variables](https://www.jahuty.com/docs/assigning-a-variable) below in your snippet:
+The parameters above would be equivalent to [assigning the variables](https://docs.jahuty.com/liquid/variables) below in your snippet:
 
 ```html
 {% assign foo = "bar" %}
@@ -81,7 +81,7 @@ The parameters above would be equivalent to [assigning the variables](https://ww
 
 ## Errors
 
-If you don't set your API key before calling `Snippet::render()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://www.jahuty.com/docs/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
+If you don't set your API key before calling `Snippet::render()`, a `BadMethodCallException` will be thrown, and if [Jahuty's API](https://docs.jahuty.com/api) returns any status code other than `2xx`, a `NotOk` exception will be thrown:
 
 ```php
 use Jahuty\Jahuty\Snippet;
@@ -115,4 +115,4 @@ This library strives to adhere to the following standards:
 2. [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md)
 5. [Semantic Versioning 2.0](http://semver.org/spec/v2.0.0.html)
 
-If you spot an error, please open an issue or [let us know](https://www.jahuty.com/contacts/new)!
+If you spot an error, please open an issue or [let us know](https://www.jahuty.com/contact)!

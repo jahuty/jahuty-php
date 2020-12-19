@@ -1,18 +1,10 @@
 <?php
-/**
- * @copyright  2019 Jack Clayton <jack@jahuty.com>
- * @license    MIT
- */
 
-namespace Jahuty\Jahuty\Exception;
+namespace Jahuty\Exception;
 
-use Exception as PHPException;
-use Jahuty\Jahuty\Data\Problem;
+use Jahuty\Resource\Problem;
 
-/**
- * Thrown when the API responds with anything but 200.
- */
-class NotOk extends PHPException
+class Error extends \Exception
 {
     private $problem;
 

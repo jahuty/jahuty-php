@@ -6,24 +6,26 @@
 		"jahuty"
 	],
 	"license": "MIT",
-	"authors": [
-		{
-			"name": "Jack Clayton",
-			"email": "jack@jahuty.com"
-		}
-	],
+  "homepage": "https://www.jahuty.com/",
+  "authors": [
+    {
+      "name": "Jahuty and contributors",
+      "homepage": "https://github.com/jahuty/jahuty-php/contributors"
+    }
+  ],
 	"require": {
 		"php": "^7.3",
-        "guzzlehttp/guzzle": "^6.3"
+    "guzzlehttp/guzzle": "^6.3"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^8.1",
-        "roave/security-advisories": "dev-master",
-        "slevomat/coding-standard": "^4"
+    "roave/security-advisories": "dev-master",
+    "slevomat/coding-standard": "^4",
+		"donatj/mock-webserver": "^2.2"
 	},
 	"autoload": {
 		"psr-4": {
-			"Jahuty\\Jahuty\\": "src/"
+			"Jahuty\\": "src/"
 		}
 	}
 }

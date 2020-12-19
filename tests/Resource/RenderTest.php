@@ -1,11 +1,8 @@
 <?php
 
-namespace Jahuty\Jahuty\Data;
+namespace Jahuty\Resource;
 
-use BadMethodCallException;
-use PHPUnit\Framework\TestCase;
-
-class RenderTest extends TestCase
+class RenderTest extends \PHPUnit\Framework\TestCase
 {
     private $payload;
 
@@ -16,7 +13,7 @@ class RenderTest extends TestCase
 
     public function testFromThrowsExceptionIfContentsDoesNotExist(): void
     {
-        $this->expectException(BadMethodCallException::class);
+        $this->expectException(\BadMethodCallException::class);
 
         unset($this->payload['content']);
 

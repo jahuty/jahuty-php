@@ -1,17 +1,11 @@
 <?php
-/**
- * @copyright  2019 Jack Clayton <jack@jahuty.com>
- * @license    MIT
- */
 
-namespace Jahuty\Jahuty\Data;
-
-use BadMethodCallException;
+namespace Jahuty\Resource;
 
 /**
  * An application/problem+json API response.
  */
-class Problem
+class Problem extends Resource
 {
     private $detail;
 
@@ -29,15 +23,15 @@ class Problem
     public static function from(array $payload): Problem
     {
         if (!array_key_exists('status', $payload)) {
-            throw new BadMethodCallException("Key 'status' does not exist");
+            throw new \BadMethodCallException("Key 'status' does not exist");
         }
 
         if (!array_key_exists('type', $payload)) {
-            throw new BadMethodCallException("Key 'type' does not exist");
+            throw new \BadMethodCallException("Key 'type' does not exist");
         }
 
         if (!array_key_exists('detail', $payload)) {
-            throw new BadMethodCallException("Key 'detail' does not exist");
+            throw new \BadMethodCallException("Key 'detail' does not exist");
         }
 
         return new Problem(

@@ -5,7 +5,7 @@ namespace Jahuty\Resource;
 /**
  * An application/problem+json API response.
  */
-class Problem extends Resource
+class Problem implements Resource
 {
     private $detail;
 

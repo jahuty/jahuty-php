@@ -2,7 +2,7 @@
 
 namespace Jahuty\Resource;
 
-class Render extends Resource
+class Render implements Resource
 {
     private $content;
 

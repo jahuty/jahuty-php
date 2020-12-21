@@ -36,7 +36,7 @@ class Client
 
     private function setHeaders(string $key): void
     {
-        $this->headers['Auhorization'] = "Bearer {$key}";
-        $this->headers['User-Agent']   = 'Jahuty PHP SDK v' . \Jahuty\Jahuty::VERSION;
+        $this->headers['Authorization'] = "Bearer {$key}";
+        $this->headers['User-Agent']    = 'Jahuty PHP SDK v' . \Jahuty\Jahuty::VERSION;
     }
 }

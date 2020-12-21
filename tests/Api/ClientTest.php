@@ -2,8 +2,9 @@
 
 namespace Jahuty\Api;
 
+use GuzzleHttp\Psr7\Request;
 use donatj\MockWebServer\MockWebServer;
-use donatj\MockWebServer\Response as MockResponse;
+use donatj\MockWebServer\Response;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
@@ -22,38 +23,17 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
     public function testSend(): void
     {
-        $request = new Request('get', 'foo');
+        // Instantiate a PSR-7 response to the /foo endpoint.
+        $request = new Request('get', self::$server->getServerRoot() . '/foo');
 
-        // Mock an empty 200 response for the "/foo" path.
-        $url = self::$server->setResponseOfPath(
-            'foo',
-            new MockResponse('{}', [], 200)
-        );
+        // Stub an empty 200 response from the /foo endpoint.
+        $url = self::$server->setResponseOfPath('foo', new Response('{}', [], 200));
 
-        $client = new Client([
-            'api_key'  => 'foo',
-            'base_uri' => self::$server->getServerRoot()
-        ]);
+        // Instantiate the API client (the API key doesn't matter).
+        $sut = new Client('foo');
 
         $response = $client->send($request);
 
-        // We can't test an expected Response here, because the mock server will
-        // add default headers to the response like 'host', 'connection', etc.
-        $this->assertEquals(200, $response->getStatus());
-        $this->assertEquals([], $response->getBody());
-    }
-
-    public function testConstructThrowsExceptionWhenApiKeyDoesNotExist(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        new Client([]);
-    }
-
-    public function testConstructThrowsExceptionWhenBaseUriDoesNotExist(): void
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        new Client(['base_uri' => null]);
+        $this->assertEquals(200, $response->getStatusCode());
     }
 }

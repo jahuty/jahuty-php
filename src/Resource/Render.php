@@ -13,7 +13,7 @@ class Render implements Resource
 
     public static function from(array $payload): Render
     {
-        if (!array_key_exists('content', $payload)) {
+        if (!\array_key_exists('content', $payload)) {
             throw new \BadMethodCallException("Key 'content' does not exist");
         }
 

@@ -23,6 +23,11 @@ class JahutyTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('jahuty.com', $host);
     }
 
+    public function testBaseUriDoesNotEndWithSlash(): void
+    {
+        $this->assertStringEndsNotWith('/', Jahuty::BASE_URI);
+    }
+
     public function testVersion(): void
     {
         $this->assertTrue(is_string(Jahuty::VERSION));

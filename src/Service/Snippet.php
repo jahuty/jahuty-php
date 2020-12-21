@@ -10,7 +10,7 @@ class Snippet extends Service
     public function render(int $id, array $options = []): Resource
     {
         $params = [];
-        
+
         if (\array_key_exists('params', $options)) {
             $params['params'] = \json_encode($options['params'], JSON_THROW_ON_ERROR);
         }

@@ -12,7 +12,7 @@ class Router
         ]
     ];
 
-    public function route(string $origin, Action $action): UriInterface
+    public function route(string $baseUri, Action $action): UriInterface
     {
         if (null === ($path = $this->getPath($action))) {
             throw new \OutOfBoundsException("Path not found");
@@ -20,7 +20,7 @@ class Router
 
         $path = $this->setVar(':id', $action->getId(), $path);
 
-        $uri = "{$origin}/{$path}";
+        $uri = "{$baseUri}/{$path}";
 
         if ($action->hasParams()) {
             $uri .= '?' . \http_build_query($action->getParams());

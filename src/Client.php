@@ -13,7 +13,7 @@ class Client
 
     private $key;
 
-    private $processor;
+    private $requests;
 
     private $resources;
 
@@ -35,11 +35,11 @@ class Client
 
     public function request(Action\Action $action): Resource\Resource
     {
-        if (null === $this->processor) {
-            $this->processor = new Action\Processor();
+        if (null === $this->requests) {
+            $this->requests = new Request\Factory();
         }
 
-        $request = $this->processor->process($action);
+        $request = $this->requests->new($action);
 
         if (null === $this->client) {
             $this->client = new Api\Client($this->key);
@@ -47,19 +47,11 @@ class Client
 
         $response = $this->client->send($request);
 
-        if ($response->isSuccess()) {
-            $name = $action->getResource();
-        } elseif ($response->isProblem()) {
-            $name = 'problem';
-        } else {
-            throw new \OutOfBoundsException("Unexpected response");
-        }
-
         if (null === $this->resources) {
             $this->resources = new Resource\Factory();
         }
 
-        $resource = $this->resources->new($name, $response->getBody());
+        $resource = $this->resources->new($action, $response);
 
         if ($resource instanceof Resource\Problem) {
             throw new Exception\Error($resource);

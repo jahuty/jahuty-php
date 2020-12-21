@@ -30,7 +30,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $url = self::$server->setResponseOfPath('foo', new Response('{}', [], 200));
 
         // Instantiate the API client (the API key doesn't matter).
-        $sut = new Client('foo');
+        $client = new Client('foo');
 
         $response = $client->send($request);
 

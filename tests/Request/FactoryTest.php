@@ -7,13 +7,13 @@ use Psr\Http\Message\RequestInterface;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
-    public function testCreateRequest(): void
+    public function testNew(): void
     {
         $action = new Show('render', 1, ['bar' => 'baz']);
 
         $this->assertInstanceOf(
             RequestInterface::class,
-            (new Factory())->createRequest($action)
+            (new Factory())->new($action)
         );
     }
 }

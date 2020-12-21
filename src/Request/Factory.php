@@ -18,7 +18,7 @@ class Factory
         $this->baseUri = $baseUri;
     }
 
-    public function createRequest(Action $action): RequestInterface
+    public function new(Action $action): RequestInterface
     {
         return new Request($this->getMethod(), $this->getUri($action));
     }
@@ -34,6 +34,6 @@ class Factory
             $this->uris = new Uri\Factory($this->baseUri);
         }
 
-        return $this->uris->createUri($action);
+        return $this->uris->new($action);
     }
 }

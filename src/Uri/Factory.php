@@ -20,7 +20,7 @@ class Factory
         $this->baseUri = $baseUri;
     }
 
-    public function createUri(Action $action): UriInterface
+    public function new(Action $action): UriInterface
     {
         $path = $this->getPath($action);
 

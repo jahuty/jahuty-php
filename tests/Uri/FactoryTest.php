@@ -15,7 +15,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             // nothing
         };
 
-        (new Factory())->createUri($action);
+        (new Factory())->new($action);
     }
 
     public function testRouteThrowsExceptionIfResourceNotFound(): void
@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $action = new Show('foo', 1);
 
-        (new Factory())->createUri($action);
+        (new Factory())->new($action);
     }
 
     public function testRouteReturnsUri(): void
@@ -33,7 +33,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertInstanceOf(
             UriInterface::class,
-            (new Factory())->createUri($action)
+            (new Factory())->new($action)
         );
     }
 
@@ -43,7 +43,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'https://www.example.com/snippets/1/render',
-            (string)(new Factory('https://www.example.com'))->createUri($action)
+            (string)(new Factory('https://www.example.com'))->new($action)
         );
     }
 
@@ -53,7 +53,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             'https://www.example.com/snippets/1/render?foo=%7B%22foo%22%3A%22bar%22%7D',
-            (string)(new Factory('https://www.example.com'))->createUri($action)
+            (string)(new Factory('https://www.example.com'))->new($action)
         );
     }
 }

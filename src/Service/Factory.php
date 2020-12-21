@@ -11,11 +11,11 @@ use Jahuty\Client;
  */
 class Factory
 {
-    private $client;
-
     private static $classes = [
         'snippets' => Snippet::class
     ];
+
+    private $client;
 
     private $services = [];
 

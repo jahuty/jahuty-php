@@ -24,6 +24,9 @@ jobs:
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
 
+      # Install sockets for mock-webserver.
+      - run: sudo apt-get install -y php-sockets
+
       # Download and cache dependencies
       - restore_cache:
           keys:
@@ -38,17 +41,7 @@ jobs:
           key: v1-dependencies-{{ checksum "composer.json" }}
           paths:
             - ./vendor
-      # - restore_cache:
-      #     keys:
-      #       - node-v1-{{ checksum "package.json" }}
-      #       - node-v1-
-      # - run: yarn install
-      # - save_cache:
-      #     key: node-v1-{{ checksum "package.json" }}
-      #     paths:
-      #       - node_modules
 
       # run tests with phpunit or codecept
-      #- run: ./vendor/bin/phpunit
       - run: ./vendor/bin/phpcs .
       - run: ./vendor/bin/phpunit --coverage-clover=coverage.xml

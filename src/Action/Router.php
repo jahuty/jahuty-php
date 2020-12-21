@@ -1,41 +1,49 @@
 <?php
 namespace Jahuty\Action;
 
-/**
- * Routes an action to a path.
- */
+use Psr\Http\Message\UriInterface;
+use GuzzleHttp\Psr7\Uri;
+
 class Router
 {
-    private static $routes = [
+    private static $paths = [
         Show::class => [
             'render' => 'snippets/:id/render'
         ]
     ];
 
-    public function route(Action $action): string
+    public function route(string $origin, Action $action): UriInterface
     {
-        if (null === ($route = $this->getRoute($action))) {
-            throw new \OutOfBoundsException("Route not found");
+        if (null === ($path = $this->getPath($action))) {
+            throw new \OutOfBoundsException("Path not found");
         }
 
-        return $this->setVar(':id', $action->getId(), $route);
+        $path = $this->setVar(':id', $action->getId(), $path);
+
+        $uri = "{$origin}/{$path}";
+
+        if ($action->hasParams()) {
+            $uri .= '?' . \http_build_query($action->getParams());
+        }
+
+        return new Uri($uri);
     }
 
-    private function getRoute(Action $action): ?string
+    private function getPath(Action $action): ?string
     {
         $name = get_class($action);
 
-        if (\array_key_exists($name, self::$routes)) {
-            if (\array_key_exists($action->getResource(), self::$routes[$name])) {
-                return self::$routes[$name][$action->getResource()];
+        if (\array_key_exists($name, self::$paths)) {
+            if (\array_key_exists($action->getResource(), self::$paths[$name])) {
+                return self::$paths[$name][$action->getResource()];
             }
         }
 
         return null;
     }
 
-    private function setVar(string $pattern, string $value, string $route): string
+    private function setVar(string $pattern, string $value, string $path): string
     {
-        return \str_replace($pattern, $value, $route);
+        return \str_replace($pattern, $value, $path);
     }
 }

@@ -1,11 +1,11 @@
 {
-	"name": "jahuty/jahuty-php",
-	"description": "Jahuty's PHP SDK",
-	"keywords": [
-		"php",
-		"jahuty"
-	],
-	"license": "MIT",
+  "name": "jahuty/jahuty-php",
+  "description": "Jahuty's PHP SDK",
+  "keywords": [
+    "php",
+    "jahuty"
+  ],
+  "license": "MIT",
   "homepage": "https://www.jahuty.com/",
   "authors": [
     {
@@ -13,23 +13,23 @@
       "homepage": "https://github.com/jahuty/jahuty-php/contributors"
     }
   ],
-	"require": {
-		"php": "^7.3 || ~8.0.0",
+  "require": {
+    "php": "^7.3 || ~8.0.0",
     "psr/http-factory": "^1",
     "psr/http-message": "^1",
     "guzzlehttp/guzzle": "^6.3"
-	},
-	"require-dev": {
+  },
+  "require-dev": {
     "phpunit/phpunit": "^8.1",
     "roave/security-advisories": "dev-master",
     "slevomat/coding-standard": "^4",
     "donatj/mock-webserver": "^2.2",
     "ext-sockets": "*",
     "ext-json": "*"
-	},
-	"autoload": {
-		"psr-4": {
-			"Jahuty\\": "src/"
-		}
-	}
+  },
+  "autoload": {
+    "psr-4": {
+      "Jahuty\\": "src/"
+    }
+  }
 }

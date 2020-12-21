@@ -22,10 +22,7 @@ jobs:
       - checkout
 
       - run: sudo apt update
-      - run: sudo docker-php-ext-install zip
-
-      # Install sockets for mock-webserver.
-      - run: sudo apt-get install -y php-sockets
+      - run: sudo docker-php-ext-install zip php-sockets
 
       # Download and cache dependencies
       - restore_cache:

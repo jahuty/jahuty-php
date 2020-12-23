@@ -1,14 +1,8 @@
 <?php
-/**
- * @copyright  2019 Jack Clayton <jack@jahuty.com>
- * @license    MIT
- */
 
-namespace Jahuty\Jahuty\Data;
+namespace Jahuty\Resource;
 
-use BadMethodCallException;
-
-class Render
+class Render implements Resource
 {
     private $content;
 
@@ -19,8 +13,8 @@ class Render
 
     public static function from(array $payload): Render
     {
-        if (!array_key_exists('content', $payload)) {
-            throw new BadMethodCallException("Key 'content' does not exist");
+        if (!\array_key_exists('content', $payload)) {
+            throw new \BadMethodCallException("Key 'content' does not exist");
         }
 
         return new Render($payload['content']);

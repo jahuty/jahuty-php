@@ -1,11 +1,8 @@
 <?php
 
-namespace Jahuty\Jahuty\Data;
+namespace Jahuty\Resource;
 
-use BadMethodCallException;
-use PHPUnit\Framework\TestCase;
-
-class ProblemTest extends TestCase
+class ProblemTest extends \PHPUnit\Framework\TestCase
 {
     private $payload;
 
@@ -16,7 +13,7 @@ class ProblemTest extends TestCase
 
     public function testFromThrowsExceptionIfDetailDoesNotExist(): void
     {
-        $this->expectException(BadMethodCallException::class);
+        $this->expectException(\BadMethodCallException::class);
 
         unset($this->payload['detail']);
 
@@ -25,7 +22,7 @@ class ProblemTest extends TestCase
 
     public function testFromThrowsExceptionIfStatusDoesNotExist(): void
     {
-        $this->expectException(BadMethodCallException::class);
+        $this->expectException(\BadMethodCallException::class);
 
         unset($this->payload['status']);
 
@@ -34,7 +31,7 @@ class ProblemTest extends TestCase
 
     public function testFromThrowsExceptionIfTypeDoesNotExist(): void
     {
-        $this->expectException(BadMethodCallException::class);
+        $this->expectException(\BadMethodCallException::class);
 
         unset($this->payload['type']);
 

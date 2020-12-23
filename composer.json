@@ -1,29 +1,35 @@
 {
-	"name": "jahuty/jahuty-php",
-	"description": "Jahuty's PHP SDK",
-	"keywords": [
-		"php",
-		"jahuty"
-	],
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "Jack Clayton",
-			"email": "jack@jahuty.com"
-		}
-	],
-	"require": {
-		"php": "^7.3",
-        "guzzlehttp/guzzle": "^6.3"
-	},
-	"require-dev": {
-		"phpunit/phpunit": "^8.1",
-        "roave/security-advisories": "dev-master",
-        "slevomat/coding-standard": "^4"
-	},
-	"autoload": {
-		"psr-4": {
-			"Jahuty\\Jahuty\\": "src/"
-		}
-	}
+  "name": "jahuty/jahuty-php",
+  "description": "Jahuty's PHP SDK",
+  "keywords": [
+    "php",
+    "jahuty"
+  ],
+  "license": "MIT",
+  "homepage": "https://www.jahuty.com/",
+  "authors": [
+    {
+      "name": "Jahuty and contributors",
+      "homepage": "https://github.com/jahuty/jahuty-php/contributors"
+    }
+  ],
+  "require": {
+    "php": "^7.3 || ~8.0.0",
+    "psr/http-factory": "^1",
+    "psr/http-message": "^1",
+    "guzzlehttp/guzzle": "^6.3"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9",
+    "roave/security-advisories": "dev-master",
+    "slevomat/coding-standard": "^6",
+    "donatj/mock-webserver": "^2.2",
+    "ext-sockets": "*",
+    "ext-json": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Jahuty\\": "src/"
+    }
+  }
 }

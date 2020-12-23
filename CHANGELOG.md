@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 5.0.0 - 2020-12-23
+
+- Reduce root namespace from `Jahuty\Jahuty` to `Jahuty`.
+- Change from a static-based architecture (e.g., `\Jahuty\Jahuty\Snippet::render(1)`) to an instance-based one (e.g., `$jahuty->snippets->render(1)`) to make the library easier to develop, test, and use.
+- Fix links in `README`.
+
 ## 4.0.0 - 2020-07-04
 
 - Rename `Serivce\Get` to `Service\Render`.

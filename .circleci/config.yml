@@ -33,4 +33,4 @@ jobs:
       - run: XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover=coverage.xml
 
       - codecov/upload:
-          file: ./.phpunit.cache/code-coveragecoverage.xml
+          file: ./.phpunit.cache/code-coverage/coverage.xml

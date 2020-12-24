@@ -17,11 +17,18 @@ class Client
 
     private $resources;
 
+    private $options = [
+        'cache' => null,
+        'ttl'   => 60
+    ];
+
     private $services;
 
-    public function __construct(string $key)
+    public function __construct(string $key, array $options = [])
     {
         $this->key = $key;
+
+        $this->setOptions($options);
     }
 
     public function __get(string $name): Service\Service
@@ -58,5 +65,30 @@ class Client
         }
 
         return $resource;
+    }
+
+    private function setOptions(array $options): void
+    {
+        $options = \array_merge($this->options, $options);
+
+        if (
+            $options['cache'] !== null &&
+            ! $options['cache'] instanceof CacheInterface
+        ) {
+            throw new \InvalidArgumentException(
+                "Option 'cache' must be null or CacheInterface"
+            );
+        }
+
+        if ($options['ttl'] !== null &&
+            (int)$options['ttl'] !== $options['ttl'] &&
+            ! $options['ttl'] instanceof \DateInterval
+        ) {
+            throw new \InvalidArgumentException(
+                "Option 'ttl' must be null, integer, or DateInterval"
+            );
+        }
+
+        $this->options = $options;
     }
 }

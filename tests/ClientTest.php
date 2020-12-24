@@ -4,6 +4,20 @@ namespace Jahuty;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
 {
+    public function testConstructThrowsExceptionWhenCacheInvalid(): void
+    {
+        $this->expectException(\InvalidARgumentException::class);
+
+        (new Client('foo', ['cache' => 'foo']));
+    }
+
+    public function testConstructThrowsExceptionWhenTtlInvalid(): void
+    {
+        $this->expectException(\InvalidARgumentException::class);
+
+        (new Client('foo', ['ttl' => 'foo']));
+    }
+
     public function testMagicGetThrowsExceptionWhenServiceDoesNotExist(): void
     {
         $this->expectException(\OutOfBoundsException::class);

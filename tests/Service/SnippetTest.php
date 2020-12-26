@@ -13,8 +13,8 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
 
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
-            ->method('request')
-            ->with($this->equalTo($action));
+            ->method('fetch')
+            ->with($this->equalTo($action), $this->equalTo(null));
 
         (new Snippet($client))->render(1);
     }
@@ -25,9 +25,24 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
 
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
-            ->method('request')
-            ->with($this->equalTo($action));
+            ->method('fetch')
+            ->with($this->equalTo($action), $this->equalTo(null));
 
         (new Snippet($client))->render(1, ['params' => ['foo' => 'bar']]);
+    }
+
+    public function testRenderWhenParamsAndTllDoExist(): void
+    {
+        $action = new Show('render', 1, ['params' => '{"foo":"bar"}']);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('fetch')
+            ->with($this->equalTo($action), $this->equalTo(60));
+
+        (new Snippet($client))->render(1, [
+            'params' => ['foo' => 'bar'],
+            'ttl'    => 60
+        ]);
     }
 }

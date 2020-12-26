@@ -9,14 +9,20 @@ class Snippet extends Service
 {
     public function render(int $id, array $options = []): Resource
     {
-        $params = [];
+        $defaults = [
+            'params' => null,
+            'ttl'    => null
+        ];
 
-        if (\array_key_exists('params', $options)) {
+        $options = \array_merge($defaults, $options);
+
+        $params = [];
+        if ($options['params']) {
             $params['params'] = \json_encode($options['params'], JSON_THROW_ON_ERROR);
         }
 
         $action = new Show('render', $id, $params);
 
-        return $this->client->request($action);
+        return $this->client->fetch($action, $options['ttl']);
     }
 }

@@ -98,8 +98,7 @@ class Client
     {
         $options = \array_merge($this->options, $options);
 
-        if (
-            $options['cache'] !== null &&
+        if ($options['cache'] !== null &&
             !($options['cache'] instanceof \Psr\SimpleCache\CacheInterface)
         ) {
             throw new \InvalidArgumentException(

@@ -88,7 +88,12 @@ class Memory implements CacheInterface
         return \array_key_exists($key, $this->values);
     }
 
-    public function set($key, $value, $ttl = null)
+    /**
+     * Keep in mind, ttl is required by the interface, but it's ignored here.
+     * The in-memory storage device (i.e., the array) doesn't survive the
+     * request cycle.
+     */
+    public function set($key, $value, $ttl = null)  // phpcs:ignore
     {
         if (!\is_string($key)) {
             throw new InvalidArgumentException(

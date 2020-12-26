@@ -17,8 +17,7 @@ class Manager
 
     public function __construct(Client $client, Cache $cache, $ttl = null)
     {
-        if (
-            $ttl !== null &&
+        if ($ttl !== null &&
             $ttl !== (int)$ttl &&
             !($ttl instanceof \DateInterval)
         ) {
@@ -34,8 +33,7 @@ class Manager
 
     public function fetch(Action $action, $ttl = null): Resource
     {
-        if (
-            $ttl !== null &&
+        if ($ttl !== null &&
             $ttl !== (int)$ttl &&
             !($ttl instanceof \DateInterval)
         ) {

@@ -52,8 +52,25 @@ class Manager
         return $resource;
     }
 
+    /**
+     * Returns a cache key for a resource, id, and params combination.
+     *
+     * I use an md5 hash to allow inputs of any length and outputs of a known
+     * (and valid) length. According to PSR-16, valid keys are, "the characters
+     * A-Z, a-z, 0-9, _, and . in any order in UTF-8 encoding and a length of up
+     * to 64 characters."
+     */
     private function getKey(Show $action): string
     {
-        return "jahuty_{$action->getResource()}_{$action->getId()}";
+        $segments = [
+             'jahuty',
+             $action->getResource(),
+             $action->getId(),
+             json_encode($action->getParams(), JSON_THROW_ON_ERROR)
+        ];
+
+        $key = implode('\\', $segments);
+
+        return md5($key);
     }
 }

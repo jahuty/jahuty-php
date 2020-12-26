@@ -9,7 +9,7 @@ use Psr\SimpleCache\CacheInterface;
 
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
-    public function testConstructThrowsExceptionWhenTtlIsInvalid(): void
+    public function testConstructThrowsExceptionWhenDefaultTtlIsInvalid(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -20,7 +20,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFetchThrowsExceptionIfTtlIsInvalid(): void
+    public function testFetchThrowsExceptionWhenArgumentTtlIsInvalid(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -40,11 +40,11 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         // stub a resource to return
         $resource = $this->createMock(Resource::class);
 
-        // stub cache to return the resource
+        // stub the cache to return the resource
         $cache = $this->createMock(CacheInterface::class);
         $cache->method('get')->willReturn($resource);
 
-        // instantiate manager with the stubbed cache
+        // instantiate the manager with the stubbed cache
         $manager = new Manager($this->createMock(Client::class), $cache);
 
         $this->assertSame(
@@ -75,55 +75,49 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFetchReturnsResourceWhenDefaultTtlDoesNotExist(): void
+    public function testFetchReturnsResourceWhenTtlDoesNotExist(): void
     {
-        // stub a resource to return
+        // stub a resource for the cache to return
         $resource = $this->createMock(Resource::class);
 
-        // stub an action to fetch
+        // stub an action for the manager to fetch
         $action = $this->createMock(Show::class);
         $action->method('getResource')->willReturn('foo');
         $action->method('getId')->willReturn(1);
 
-        // define the expected cache key given the data above
-        $key = "jahuty_foo_1";
-
-        // stub the cache to miss and expect set
+        // stub the cache to miss and mock the cache to set the resource
         $cache = $this->createMock(CacheInterface::class);
         $cache->method('get')->willReturn(null);
 
         $cache->expects($this->once())
             ->method('set')
             ->with(
-                $this->identicalTo($key),
-                $this->identicalTo($resource),
-                $this->identicalTo(null)
+                $this->matchesRegularExpression('/[a-z0-9]/'),
+                $this->equalTo($resource),
+                $this->equalTo(null)
             );
 
-        // stub client to return the resource
+        // stub the jahuty client to return the resource
         $client = $this->createMock(Client::class);
         $client->method('request')->willReturn($resource);
 
-        // instantiate manager with the stubs
+        // instantiate the manager with the stubs
         $manager = new Manager($client, $cache);
 
         $this->assertSame($resource, $manager->fetch($action));
     }
 
-    public function testFetchReturnsResourceWhenDefaultTtlDoesExist(): void
+    public function testFetchReturnsResourceWhenGlobalTtlDoesExist(): void
     {
         $defaultTtl = 60;
 
-        // stub a resource to return
+        // stub a resource for the cache to return
         $resource = $this->createMock(Resource::class);
 
-        // stub an action to fetch
+        // stub an action for the manager to fetch
         $action = $this->createMock(Show::class);
         $action->method('getResource')->willReturn('foo');
         $action->method('getId')->willReturn(1);
-
-        // define the expected cache key given the data above
-        $key = "jahuty_foo_1";
 
         // stub the cache to miss and expect set
         $cache = $this->createMock(CacheInterface::class);
@@ -132,16 +126,16 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $cache->expects($this->once())
             ->method('set')
             ->with(
-                $this->identicalTo($key),
-                $this->identicalTo($resource),
-                $this->identicalTo($defaultTtl)
+                $this->matchesRegularExpression('/[a-z0-9]/'),
+                $this->equalTo($resource),
+                $this->equalTo($defaultTtl)
             );
 
-        // stub client to return the resource
+        // stub the jahuty client to return the resource
         $client = $this->createMock(Client::class);
         $client->method('request')->willReturn($resource);
 
-        // instantiate manager with the stubs
+        // instantiate manager with the stubs and default ttl
         $manager = new Manager($client, $cache, $defaultTtl);
 
         $this->assertSame($resource, $manager->fetch($action));
@@ -152,27 +146,24 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         $globalTtl = 10;
         $localTtl  = 100;
 
-        // stub a resource to return
+        // stub a resource for the cache to return
         $resource = $this->createMock(Resource::class);
 
-        // stub an action to fetch
+        // stub an action for the manager to fetch
         $action = $this->createMock(Show::class);
         $action->method('getResource')->willReturn('foo');
         $action->method('getId')->willReturn(1);
 
-        // define the expected cache key given the data above
-        $key = "jahuty_foo_1";
-
-        // stub the cache to miss and expect set
+        // stub the cache to miss and expect a set
         $cache = $this->createMock(CacheInterface::class);
         $cache->method('get')->willReturn(null);
 
         $cache->expects($this->once())
             ->method('set')
             ->with(
-                $this->identicalTo($key),
-                $this->identicalTo($resource),
-                $this->identicalTo($localTtl)
+                $this->matchesRegularExpression('/[a-z0-9]/'),
+                $this->equalTo($resource),
+                $this->equalTo($localTtl)
             );
 
         // stub client to return the resource

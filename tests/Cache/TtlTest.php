@@ -1,6 +1,6 @@
 <?php
 
-namespace Jahuty\Ttl;
+namespace Jahuty\Cache;
 
 class TtlTest extends \PHPUnit\Framework\TestCase
 {

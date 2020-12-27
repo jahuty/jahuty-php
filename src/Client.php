@@ -43,7 +43,7 @@ class Client
         return $this->services->$name;
     }
 
-    public function fetch(Action\Action $action, Ttl\Ttl $ttl): Resource\Resource
+    public function fetch(Action\Action $action, Cache\Ttl $ttl): Resource\Resource
     {
         if (null === $this->cache) {
             $this->cache = new Cache\Manager(
@@ -107,7 +107,7 @@ class Client
         }
 
         // Accepts null, int, or DateInterval.
-        $options['ttl'] = new Ttl\Ttl($options['ttl']);
+        $options['ttl'] = new Cache\Ttl($options['ttl']);
 
         $this->options = $options;
     }

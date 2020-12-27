@@ -5,7 +5,6 @@ namespace Jahuty\Cache;
 use Jahuty\Action\{Action, Show};
 use Jahuty\Client;
 use Jahuty\Resource\Resource;
-use Jahuty\Ttl\Ttl;
 use Psr\SimpleCache\CacheInterface as Cache;
 
 class Manager

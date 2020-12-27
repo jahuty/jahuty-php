@@ -1,11 +1,12 @@
 <?php
 
-namespace Jahuty\Ttl;
+namespace Jahuty\Cache;
 
 /**
- * The time between when an item is cached and when it is considered stale.
+ * A cache item's Time To Live (TTL) is the time between when an item is cached
+ * and when it's considered stale.
  *
- * According to PSR-16, there are several valid time-to-live values:
+ * According to PSR-16, there are several valid values:
  *
  *   a null value
  *     The implementing library may use a configured default duration, or

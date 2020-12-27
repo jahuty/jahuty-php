@@ -37,4 +37,12 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     {
         $this->assertEquals('foo', (string)new Render('foo'));
     }
+
+    // Required for caching.
+    public function testObjectSpportsLosslessSerializationAndDeserialization(): void
+    {
+        $render = new Render('foo');
+
+        $this->assertEquals($render, unserialize(serialize($render)));
+    }
 }

@@ -3,6 +3,7 @@
 namespace Jahuty\Api;
 
 use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\Exception\BadResponseException;
 use Psr\Http\Message\{
     RequestInterface as Request,
     ResponseInterface as Response
@@ -31,7 +32,12 @@ class Client
             $this->client = new HttpClient(['headers' => $this->headers]);
         }
 
-        return $this->client->send($request);
+        try {
+            return $this->client->send($request);
+        } catch (BadResponseException $e) {
+            // We'll handle client and server errors.
+            return $e->getResponse();
+        }
     }
 
     private function setHeaders(string $key): void

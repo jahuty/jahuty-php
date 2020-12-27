@@ -9,14 +9,14 @@ class Memory implements CacheInterface
 {
     private $values = [];
 
-    public function clear()
+    public function clear(): bool
     {
         $this->values = [];
 
         return true;
     }
 
-    public function delete($key)
+    public function delete($key): bool
     {
         if (!\is_string($key)) {
             throw new InvalidArgumentException(
@@ -31,7 +31,7 @@ class Memory implements CacheInterface
         return true;
     }
 
-    public function deleteMultiple($keys)
+    public function deleteMultiple($keys): bool
     {
         if (!\is_array($keys)) {
             throw new InvalidArgumentException(
@@ -61,7 +61,7 @@ class Memory implements CacheInterface
         return $this->values[(string)$key];
     }
 
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null): array
     {
         if (!\is_array($keys)) {
             throw new InvalidArgumentException(
@@ -78,7 +78,7 @@ class Memory implements CacheInterface
         return $values;
     }
 
-    public function has($key)
+    public function has($key): bool
     {
         if (!\is_string($key)) {
             throw new InvalidArgumentException(
@@ -88,7 +88,7 @@ class Memory implements CacheInterface
         return \array_key_exists($key, $this->values);
     }
 
-    public function set($key, $value, $ttl = null)
+    public function set($key, $value, $ttl = null): bool
     {
         if (!\is_string($key)) {
             throw new InvalidArgumentException(
@@ -117,7 +117,7 @@ class Memory implements CacheInterface
         return true;
     }
 
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $ttl = null): bool
     {
         if (!\is_array($values)) {
             throw new InvalidArgumentException(

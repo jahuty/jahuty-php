@@ -2,7 +2,7 @@
 
 namespace Jahuty\Cache;
 
-use Jahuty\Action\{Action, Show};
+use Jahuty\Action\Show;
 use Jahuty\Client;
 use Jahuty\Resource\Resource;
 use Jahuty\Ttl\Ttl;

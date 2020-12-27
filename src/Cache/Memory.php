@@ -88,12 +88,7 @@ class Memory implements CacheInterface
         return \array_key_exists($key, $this->values);
     }
 
-    /**
-     * Keep in mind, ttl is required by the interface, but it's ignored here.
-     * The in-memory storage device (i.e., the array) doesn't survive the
-     * request cycle.
-     */
-    public function set($key, $value, $ttl = null)  // phpcs:ignore
+    public function set($key, $value, $ttl = null)
     {
         if (!\is_string($key)) {
             throw new InvalidArgumentException(
@@ -101,7 +96,23 @@ class Memory implements CacheInterface
             );
         }
 
-        $this->values[$key] = $value;
+        if ($ttl !== null && !\is_int($ttl)) {
+            throw new InvalidArgumentException(
+                "Parameter three, ttl, must be null or int"
+            );
+        }
+
+        if ($ttl === null || $ttl > 0) {
+            // DO cache the value. The actual TTL is ignored, however, because
+            // these values will be discarded at the end of the request
+            // lifecycle.
+            $this->values[$key] = $value;
+        } else {
+            // DO NOT cache the value, and in fact, delete it. According to
+            // PSR-16, "if a negative or zero TTL is provided, the item MUST be
+            // deleted from the cache if it exists, as it is expired already."
+            $this->delete($key);
+        }
 
         return true;
     }

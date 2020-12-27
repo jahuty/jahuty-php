@@ -4,6 +4,7 @@ namespace Jahuty\Service;
 
 use Jahuty\Action\Show;
 use Jahuty\Resource\Resource;
+use Jahuty\Ttl\Ttl;
 
 class Snippet extends Service
 {
@@ -18,11 +19,15 @@ class Snippet extends Service
 
         $params = [];
         if ($options['params']) {
-            $params['params'] = \json_encode($options['params'], JSON_THROW_ON_ERROR);
+            $params['params'] = \json_encode(
+                $options['params'],
+                JSON_THROW_ON_ERROR
+            );
         }
 
         $action = new Show('render', $id, $params);
+        $ttl    = new Ttl($options['ttl']);
 
-        return $this->client->fetch($action, $options['ttl']);
+        return $this->client->fetch($action, $ttl);
     }
 }

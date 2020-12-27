@@ -5,6 +5,7 @@ namespace Jahuty;
 use donatj\MockWebServer\{MockWebServer, Response};
 use Jahuty\Action\Show;
 use Jahuty\Resource\Render;
+use Jahuty\Ttl\Ttl;
 use Psr\SimpleCache\CacheInterface;
 
 class ClientTest extends \PHPUnit\Framework\TestCase
@@ -71,7 +72,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $action = new Show('render', $id);
 
         $expected = new Render($content);
-        $actual   = $client->fetch($action);
+        $actual   = $client->fetch($action, $this->createMock(Ttl::class));
 
         $this->assertEquals($expected, $actual);
     }
@@ -93,7 +94,10 @@ class ClientTest extends \PHPUnit\Framework\TestCase
             'cache'    => $cache
         ]);
 
-        $client->fetch(new Show('render', $id));
+        $client->fetch(
+            new Show('render', $id),
+            $this->createMock(Ttl::class)
+        );
     }
 
     public function testRequestThrowsExceptionWhenProblem(): void

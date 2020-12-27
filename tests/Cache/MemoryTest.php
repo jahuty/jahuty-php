@@ -145,7 +145,15 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
         (new Memory())->set(1, 'foo');
     }
 
-    public function testSet(): void
+    public function testSetThrowsExeptionIfTtlNotValid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        // ttl must be null, int, or DateInterval
+        (new Memory())->set(1, 'foo', 'foo');
+    }
+
+    public function testSetIfTtlIsNull(): void
     {
         $cache = new Memory();
 
@@ -154,6 +162,39 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($cache->set('foo', true));
 
         $this->assertTrue($cache->has('foo'));
+    }
+
+    public function testSetIfTtlIsPositiveInteger(): void
+    {
+        $cache = new Memory();
+
+        $this->assertFalse($cache->has('foo'));
+
+        $this->assertTrue($cache->set('foo', true, 1));
+
+        $this->assertTrue($cache->has('foo'));
+    }
+
+    public function testSetIfTtlIsZero(): void
+    {
+        $cache = new Memory();
+
+        $this->assertFalse($cache->has('foo'));
+
+        $this->assertTrue($cache->set('foo', true, 0));
+
+        $this->assertFalse($cache->has('foo'));
+    }
+
+    public function testSetIfTtlIsNegativeInteger(): void
+    {
+        $cache = new Memory();
+
+        $this->assertFalse($cache->has('foo'));
+
+        $this->assertTrue($cache->set('foo', true, -1));
+
+        $this->assertFalse($cache->has('foo'));
     }
 
     public function testSetMultipleThrowsExceptionIfValuesIsNotValid(): void

@@ -5,6 +5,7 @@ namespace Jahuty\Cache;
 use Jahuty\Action\{Action, Show};
 use Jahuty\Client;
 use Jahuty\Resource\Resource;
+use Jahuty\Ttl\Ttl;
 use Psr\SimpleCache\CacheInterface as Cache;
 
 class Manager
@@ -15,38 +16,24 @@ class Manager
 
     private $ttl;
 
-    public function __construct(Client $client, Cache $cache, $ttl = null)
+    public function __construct(Client $client, Cache $cache, Ttl $ttl)
     {
-        if ($ttl !== null &&
-            $ttl !== (int)$ttl &&
-            !($ttl instanceof \DateInterval)
-        ) {
-            throw new \InvalidArgumentException(
-                "Parameter three, ttl, must be null, integer, or DateInterval"
-            );
-        }
-
         $this->client = $client;
         $this->cache  = $cache;
         $this->ttl    = $ttl;
     }
 
-    public function fetch(Action $action, $ttl = null): Resource
+    public function fetch(Action $action, Ttl $ttl): Resource
     {
-        if ($ttl !== null &&
-            $ttl !== (int)$ttl &&
-            !($ttl instanceof \DateInterval)
-        ) {
-            throw new \InvalidArgumentException(
-                "Parameter two, ttl, must be null, integer, or DateInterval"
-            );
+        if ($ttl->isNull()) {
+            $ttl = $this->ttl;
         }
 
         $key = $this->getKey($action);
 
         if (null === ($resource = $this->cache->get($key))) {
             $resource = $this->client->request($action);
-            $this->cache->set($key, $resource, $ttl ?: $this->ttl);
+            $this->cache->set($key, $resource, $ttl->toSeconds());
         }
 
         return $resource;

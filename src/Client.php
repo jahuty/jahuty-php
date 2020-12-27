@@ -43,7 +43,7 @@ class Client
         return $this->services->$name;
     }
 
-    public function fetch(Action\Action $action, $ttl = null): Resource\Resource
+    public function fetch(Action\Action $action, Ttl\Ttl $ttl): Resource\Resource
     {
         if (null === $this->cache) {
             $this->cache = new Cache\Manager(
@@ -106,14 +106,8 @@ class Client
             );
         }
 
-        if ($options['ttl'] !== null &&
-            (int)$options['ttl'] !== $options['ttl'] &&
-            !($options['ttl'] instanceof \DateInterval)
-        ) {
-            throw new \InvalidArgumentException(
-                "Option 'ttl' must be null, integer, or DateInterval"
-            );
-        }
+        // Accepts null, int, or DateInterval.
+        $options['ttl'] = new Ttl\Ttl($options['ttl']);
 
         $this->options = $options;
     }

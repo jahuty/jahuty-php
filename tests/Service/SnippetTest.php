@@ -4,6 +4,7 @@ namespace Jahuty\Service;
 
 use Jahuty\Client;
 use Jahuty\Action\Show;
+use Jahuty\Ttl\Ttl;
 
 class SnippetTest extends \PHPUnit\Framework\TestCase
 {
@@ -14,7 +15,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($action), $this->equalTo(null));
+            ->with($this->equalTo($action), $this->isInstanceOf(Ttl::class));
 
         (new Snippet($client))->render(1);
     }
@@ -26,7 +27,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($action), $this->equalTo(null));
+            ->with($this->equalTo($action), $this->isInstanceOf(Ttl::class));
 
         (new Snippet($client))->render(1, ['params' => ['foo' => 'bar']]);
     }
@@ -38,7 +39,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($action), $this->equalTo(60));
+            ->with($this->equalTo($action), $this->equalTo(new Ttl(60)));
 
         (new Snippet($client))->render(1, [
             'params' => ['foo' => 'bar'],

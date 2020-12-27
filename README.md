@@ -75,11 +75,11 @@ The parameters above would be equivalent to [assigning the variables](https://do
 
 ## Caching
 
-Caching renders allows you to tune your application's response time based on your content's stability and traffic. By caching a render for a period of time, you can decrease the number of synchronous requests to Jahuty's API.
+Caching allows you to tune your application's response time based on your content's stability and traffic. By caching a render for a period of time, you can decrease the number of synchronous requests to Jahuty's API, and thereby increase your response time.
 
 ### Caching in memory (default)
 
-By default, Jahuty uses an in-memory cache to avoid requesting the same render more than once during the original request's lifecycle. For example:
+By default, Jahuty uses an in-memory cache to avoid requesting the same render more than once during the same request's lifecycle. For example:
 
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
@@ -92,11 +92,11 @@ $render1 = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 $render2 = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 ```
 
-The in-memory cache only persists for the duration of the original request. At the end of the request's lifecycle, the cache will be discarded. To store renders across requests, you need a persistent cache.
+The in-memory cache only persists for the duration of the original request, however. At the end of the request's lifecycle, the cache will be discarded. To store renders across requests, you need a persistent cache.
 
 ### Caching persistently
 
-A persistent cache allows renders to be cached across multiple requests. This reduces the number of synchronous network requests to Jahuty's API, and thereby increases your application's average response time.
+A persistent cache allows renders to be cached across multiple requests. This reduces the number of synchronous network requests to Jahuty's API and your application's average response time.
 
 To configure Jahuty to use your persistent cache, pass a [PSR-16](https://www.php-fig.org/psr/psr-16/) `CacheInterface` implementation to the client via the `cache` configuration option:
 
@@ -106,10 +106,16 @@ $jahuty = new \Jahuty\Client('YOUR_API_KEY', ['cache' => $cache]);
 
 ### Expiring
 
-There are three methods for configuring a render's Time to Live (TTL). From lowest-to-highest precedence, they are:
+There are three methods for configuring a render's Time to Live (TTL). From lowest-to-highest precedence, they are as follows: configuring your caching implementation, configuring this library's default TTL, and configuring a render's TTL.
 
-1. _Configuring your caching implementation_. Many cache implementations allow you to set a default TTL, which this library will use by default.
-1. _Configuring this library's default TTL_. You can pass an integer number of seconds or a `DateInterval` via the client's `ttl` configuration option. This TTL will be used for all renders:
+#### Configuring your caching implementation
+
+Many cache implementations allow you to set a default TTL, which this library will use by default.
+
+#### Configuring this library's default TTL
+
+Or, you can pass an integer number of seconds or a `DateInterval` instance via the client's `ttl` configuration option, which will be used for all renders:
+
 ```php
 // cache all renders for sixty seconds
 $jahuty = new \Jahuty\Client('YOUR_API_KEY', [
@@ -117,7 +123,11 @@ $jahuty = new \Jahuty\Client('YOUR_API_KEY', [
   'ttl'   => 60
 ]);
 ```
-1. _Configuring a render's `ttl`_. You can pass an integer number of seconds or a `DateInterval` instance via the render's `ttl` option for a specific render:
+
+#### Configuring a render's TTL
+
+Finally, you can pass an integer number of seconds or a `DateInterval` instance via a render's `ttl` configuration option to fine-tune a render's time to live:
+
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY', ['cache' => $cache]);
 

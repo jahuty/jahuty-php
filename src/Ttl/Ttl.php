@@ -43,9 +43,7 @@ class Ttl
 
     public function toSeconds(): ?int
     {
-        if ($this->value === null) {
-            $seconds = null;
-        } elseif (is_int($this->value)) {
+        if ($this->value === null || is_int($this->value)) {
             $seconds = $this->value;
         } else {
             // The number of seconds in a DateInterval object depends on the

@@ -26,6 +26,16 @@ class TtlTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(Ttl::class, new Ttl(new \DateInterval('PT1S')));
     }
 
+    public function testIsNullReturnsTrueWhenNull(): void
+    {
+        $this->assertTrue((new Ttl(null))->isNull());
+    }
+
+    public function testIsNullReturnsFalseWhenNotNull(): void
+    {
+        $this->assertFalse((new Ttl(1))->isNull());
+    }
+
     public function testToSecondsWhenValueIsNull(): void
     {
         $this->assertNull((new Ttl(null))->toSeconds());

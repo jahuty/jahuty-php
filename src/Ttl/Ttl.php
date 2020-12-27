@@ -36,6 +36,11 @@ class Ttl
         $this->value = $value;
     }
 
+    public function isNull(): bool
+    {
+        return $this->value === null;
+    }
+
     public function toSeconds(): ?int
     {
         if ($this->value === null) {

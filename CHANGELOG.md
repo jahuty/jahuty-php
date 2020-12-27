@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 5.1.1 - 2020-12-27
+
+- Move `Jahuty\Ttl\Ttl` to `Jahuty\Cache\Ttl`.
+- Change the caching section introduction and examples in the `README` to improve explanations.
+
 ## 5.1.0 - 2020-12-26
 
 - Add a second, optional parameter to `Jahuty\Client`, an options array with support for the following options: `cache`, a `CacheInterface` implementation); `ttl`, a `null`, `int`, or `DateInterval` SDK-wide time-to-live; and, `base_uri`, the base URI for API requests (useful for testing).

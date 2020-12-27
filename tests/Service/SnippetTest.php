@@ -2,9 +2,9 @@
 
 namespace Jahuty\Service;
 
-use Jahuty\Client;
 use Jahuty\Action\Show;
-use Jahuty\Ttl\Ttl;
+use Jahuty\Cache\Ttl;
+use Jahuty\Client;
 
 class SnippetTest extends \PHPUnit\Framework\TestCase
 {

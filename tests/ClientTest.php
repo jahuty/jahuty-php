@@ -4,8 +4,8 @@ namespace Jahuty;
 
 use donatj\MockWebServer\{MockWebServer, Response};
 use Jahuty\Action\Show;
+use Jahuty\Cache\Ttl;
 use Jahuty\Resource\Render;
-use Jahuty\Ttl\Ttl;
 use Psr\SimpleCache\CacheInterface;
 
 class ClientTest extends \PHPUnit\Framework\TestCase

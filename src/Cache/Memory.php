@@ -96,6 +96,8 @@ class Memory implements CacheInterface
             );
         }
 
+        // WARNING: Not supporting DateInterval is a break from the standard,
+        // but it seems acceptable as an internal tool.
         if ($ttl !== null && !\is_int($ttl)) {
             throw new InvalidArgumentException(
                 "Parameter three, ttl, must be null or int"

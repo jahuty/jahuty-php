@@ -4,7 +4,7 @@ namespace Jahuty\Service;
 
 use Jahuty\Action\Show;
 use Jahuty\Resource\Resource;
-use Jahuty\Ttl\Ttl;
+use Jahuty\Cache\Ttl;
 
 class Snippet extends Service
 {

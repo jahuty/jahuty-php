@@ -3,7 +3,8 @@
 namespace Jahuty\Response;
 
 use GuzzleHttp\Psr7\Response;
-use Jahuty\Action\Show;
+use Jahuty\Action\{Index, Show};
+use Jahuty\Collection\Collection;
 use Jahuty\Resource\{Problem, Render};
 
 class HandlerTest extends \PHPUnit\Framework\TestCase
@@ -59,5 +60,20 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $resource = (new Handler())->handle($action, $response);
 
         $this->assertInstanceOf(Render::class, $resource);
+    }
+
+    public function testHandleReturnsCollection(): void
+    {
+        $action = new Index('render');
+
+        $response = new Response(
+            200,
+            ['Content-Type' => 'application/json'],
+            '[{ "id": 1, "content": "foo" }, { "id": 2, "content": "bar" }]'
+        );
+
+        $resource = (new Handler())->handle($action, $response);
+
+        $this->assertInstanceOf(Collection::class, $resource);
     }
 }

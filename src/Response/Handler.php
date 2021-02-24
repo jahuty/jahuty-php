@@ -2,31 +2,63 @@
 
 namespace Jahuty\Response;
 
-use Jahuty\Action\Action;
-use Jahuty\Resource;
+use Jahuty\Action\{Action, Index};
+use Jahuty\Collection\Collection;
+use Jahuty\Resource\{Factory, Resource};
 use Psr\Http\Message\ResponseInterface as Response;
 
 class Handler
 {
     private $resources;
 
-    public function handle(Action $action, Response $response): Resource\Resource
+    public function handle(Action $action, Response $response)
     {
-        if ($this->isSuccess($response)) {
-            $name = $action->getResource();
-        } elseif ($this->isProblem($response)) {
-            $name = 'problem';
-        } else {
+        if (null === ($name = $this->getResourceName($action, $response))) {
             throw new \OutOfBoundsException('Unexpected response');
         }
 
         $payload = $this->parse($response->getBody());
 
         if ($this->resources === null) {
-            $this->resources = new Resource\Factory();
+            $this->resources = new Factory();
         }
 
+        if ($this->isCollection($action)) {
+            $result = $this->createCollection($name, $payload);
+        } else {
+            $result = $this->createResource($name, $payload);
+        }
+
+        return $result;
+    }
+
+    private function createCollection(string $name, array $payload): Collection
+    {
+        $resources = [];
+
+        foreach ($payload as $item) {
+            $resources[] = $this->createResource($name, $item);
+        }
+
+        return new Collection($resources);
+    }
+
+    private function createResource(string $name, array $payload): Resource
+    {
         return $this->resources->create($name, $payload);
+    }
+
+    private function getResourceName(Action $action, Response $response): ?string
+    {
+        $name = null;
+
+        if ($this->isSuccess($response)) {
+            $name = $action->getResource();
+        } elseif ($this->isProblem($response)) {
+            $name = 'problem';
+        }
+
+        return $name;
     }
 
     private function hasSuccessfulStatusCode(Response $response): bool
@@ -49,6 +81,11 @@ class Handler
             $response->getHeaderLine('Content-Type'),
             'application/problem+json'
         ) !== false;
+    }
+
+    private function isCollection(Action $action): bool
+    {
+        return $action instanceof Index;
     }
 
     private function isSuccess(Response $response): bool

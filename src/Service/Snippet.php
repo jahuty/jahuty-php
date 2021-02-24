@@ -2,7 +2,8 @@
 
 namespace Jahuty\Service;
 
-use Jahuty\Action\Show;
+use Jahuty\Action\{Index, Show};
+use Jahuty\Collection\Collection;
 use Jahuty\Resource\Resource;
 use Jahuty\Cache\Ttl;
 
@@ -29,5 +30,12 @@ class Snippet extends Service
         $ttl    = new Ttl($options['ttl']);
 
         return $this->client->fetch($action, $ttl);
+    }
+
+    public function renders(string $tag): Collection
+    {
+        $action = new Index('render', ['tag' => $tag]);
+
+        return $this->client->request($action);
     }
 }

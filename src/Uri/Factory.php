@@ -1,13 +1,16 @@
 <?php
 namespace Jahuty\Uri;
 
-use Jahuty\Action\Action;
+use Jahuty\Action\{Action, Show};
 use Psr\Http\Message\UriInterface;
 use GuzzleHttp\Psr7\Uri;
 
 class Factory
 {
     private static $paths = [
+        'index' => [
+            'render' => 'snippets/render'
+        ],
         'show' => [
             'render' => 'snippets/:id/render'
         ]
@@ -29,17 +32,32 @@ class Factory
         return new Uri($uri);
     }
 
+    private function getActionName(Action $action): string
+    {
+        $path = \get_class($action);
+        $segments = \explode('\\', $path);
+        $classname = \end($segments);
+
+        return strtolower($classname);
+    }
+
     private function getPath(Action $action): ?string
     {
-        if (!\array_key_exists($action->getResource(), self::$paths['show'])) {
+        $name = $this->getActionName($action);
+
+        if (!\array_key_exists($name, self::$paths)) {
+            throw new \OutOfBoundsException("Action '$name' not found");
+        }
+
+        if (!\array_key_exists($action->getResource(), self::$paths[$name])) {
             throw new \OutOfBoundsException(
-                "Resource '{$action->getResource()}' not found"
+                "Resource '{$action->getResource()}' not found for action '$name'"
             );
         }
 
-        $path = self::$paths['show'][$action->getResource()];
+        $path = self::$paths[$name][$action->getResource()];
 
-        $path = $this->setVar(':id', $action->getId(), $path);
+        $path = $this->setVars($action, $path);
 
         return $path;
     }
@@ -58,5 +76,14 @@ class Factory
     private function setVar(string $pattern, string $value, string $path): string
     {
         return \str_replace($pattern, $value, $path);
+    }
+
+    private function setVars(Action $action, string $path): string
+    {
+        if ($action instanceof Show) {
+            $path = $this->setVar(':id', $action->getId(), $path);
+        }
+
+        return $path;
     }
 }

@@ -138,7 +138,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     {
         $response = new Response(
             '{"content":"'. $content .'"}',
-            ['Content-Type' => 'application/json'], 
+            ['Content-Type' => 'application/json'],
             200
         );
 

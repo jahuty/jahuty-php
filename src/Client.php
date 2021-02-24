@@ -17,7 +17,7 @@ class Client
 
     private $requests;
 
-    private $resources;
+    private $responses;
 
     private $options = [
         'cache'    => null,
@@ -70,11 +70,11 @@ class Client
 
         $response = $this->client->send($request);
 
-        if (null === $this->resources) {
-            $this->resources = new Resource\Factory();
+        if (null === $this->responses) {
+            $this->responses = new Response\Handler();
         }
 
-        $resource = $this->resources->new($action, $response);
+        $resource = $this->responses->handle($action, $response);
 
         if ($resource instanceof Resource\Problem) {
             throw new Exception\Error($resource);

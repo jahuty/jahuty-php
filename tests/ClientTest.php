@@ -136,7 +136,11 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
     private function setupEndpointWithSuccess($id = 1, $content = 'foo'): void
     {
-        $response = new Response('{"content":"'. $content .'"}', [], 200);
+        $response = new Response(
+            '{"content":"'. $content .'"}',
+            ['Content-Type' => 'application/json'], 
+            200
+        );
 
         self::$server->setResponseOfPath("snippets/$id/render", $response);
     }

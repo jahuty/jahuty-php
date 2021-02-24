@@ -56,7 +56,7 @@ class Client
         return $this->cache->fetch($action, $ttl);
     }
 
-    public function request(Action\Action $action): Resource\Resource
+    public function request(Action\Action $action)
     {
         if (null === $this->requests) {
             $this->requests = new Request\Factory($this->getOption('base_uri'));
@@ -74,13 +74,13 @@ class Client
             $this->responses = new Response\Handler();
         }
 
-        $resource = $this->responses->handle($action, $response);
+        $result = $this->responses->handle($action, $response);
 
-        if ($resource instanceof Resource\Problem) {
-            throw new Exception\Error($resource);
+        if ($result instanceof Resource\Problem) {
+            throw new Exception\Error($result);
         }
 
-        return $resource;
+        return $result;
     }
 
     private function getOption(string $name)

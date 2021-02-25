@@ -48,6 +48,26 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('foo', (string)new Render('foo'));
     }
 
+    public function testGetSnippetIdWhenSnippetIdExists(): void
+    {
+        $this->assertEquals(1, (new Render('foo', 1))->getSnippetId());
+    }
+
+    public function testGetSnippetIdWhenSnippetIdDoesNotExist(): void
+    {
+        $this->assertNull((new Render('foo'))->getSnippetId());
+    }
+
+    public function testHasSnippetIdWhenSnippetIdDoesNotExist(): void
+    {
+        $this->assertFalse((new Render('foo'))->hasSnippetId());
+    }
+
+    public function testHasSnippetIdWhenSnippetIdDoesExist(): void
+    {
+        $this->assertTrue((new Render('foo', 1))->hasSnippetId());
+    }
+
     // Required for caching.
     public function testObjectSpportsLosslessSerializationAndDeserialization(): void
     {

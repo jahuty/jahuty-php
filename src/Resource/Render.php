@@ -6,9 +6,17 @@ class Render implements Resource
 {
     private $content;
 
-    public function __construct(string $content)
+    private $snippetId;
+
+    public function __construct(string $content, int $snippetId = null)
     {
         $this->content = $content;
+        $this->snippetId = $snippetId;
+    }
+
+    public function __toString(): string
+    {
+        return $this->content;
     }
 
     public static function from(array $payload): Render
@@ -17,16 +25,21 @@ class Render implements Resource
             throw new \BadMethodCallException("Key 'content' does not exist");
         }
 
-        return new Render($payload['content']);
-    }
-
-    public function __toString(): string
-    {
-        return $this->content;
+        return new Render($payload['content'], $payload['snippet_id'] ?? null);
     }
 
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function getSnippetId(): ?int
+    {
+        return $this->snippetId;
+    }
+
+    public function hasSnippetId(): bool
+    {
+        return $this->snippetId !== null;
     }
 }

@@ -28,6 +28,16 @@ class RenderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testFromAcceptsUnusedAttributes(): void
+    {
+        $payload = ['content' => 'foo', 'bar' => 'baz'];
+
+        $expected = new Render('foo');
+        $actual   = Render::from($payload);
+
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testGetContent(): void
     {
         $this->assertEquals('foo', (new Render('foo'))->getContent());

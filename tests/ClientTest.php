@@ -71,7 +71,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $action = new Show('render', $id);
 
-        $expected = new Render($content);
+        $expected = new Render($id, $content);
         $actual   = $client->fetch($action, $this->createMock(Ttl::class));
 
         $this->assertEquals($expected, $actual);
@@ -128,7 +128,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
 
         $action = new Show('render', $id);
 
-        $expected = new Render($content);
+        $expected = new Render($id, $content);
         $actual   = $client->request($action);
 
         $this->assertEquals($expected, $actual);
@@ -137,7 +137,7 @@ class ClientTest extends \PHPUnit\Framework\TestCase
     private function setupEndpointWithSuccess($id = 1, $content = 'foo'): void
     {
         $response = new Response(
-            '{"content":"'. $content .'"}',
+            '{"snippet_id":'. $id .', "content":"'. $content .'"}',
             ['Content-Type' => 'application/json'],
             200
         );

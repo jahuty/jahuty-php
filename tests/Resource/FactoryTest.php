@@ -13,7 +13,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateReturnsResource(): void
     {
-        $payload = ['content' => '<p>foo</p>'];
+        $payload = ['snippet_id' => 1, 'content' => '<p>foo</p>'];
 
         $resource = (new Factory())->create('render', $payload);
 

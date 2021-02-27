@@ -53,7 +53,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $response = new Response(
             200,
             ['Content-Type' => 'application/json'],
-            '{ "content": "foo" }'
+            '{ "snippet_id": 1, "content": "foo" }'
         );
 
         $resource = (new Handler())->handle($action, $response);
@@ -68,7 +68,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
         $response = new Response(
             200,
             ['Content-Type' => 'application/json'],
-            '[{ "id": 1, "content": "foo" }, { "id": 2, "content": "bar" }]'
+            '[{ "snippet_id": 1, "content": "foo" }, { "snippet_id": 2, "content": "bar" }]'
         );
 
         $result = (new Handler())->handle($action, $response);

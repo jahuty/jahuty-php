@@ -8,10 +8,10 @@ class Render implements Resource
 
     private $snippetId;
 
-    public function __construct(string $content, int $snippetId = null)
+    public function __construct(int $snippetId, string $content)
     {
-        $this->content = $content;
         $this->snippetId = $snippetId;
+        $this->content = $content;
     }
 
     public function __toString(): string
@@ -21,11 +21,15 @@ class Render implements Resource
 
     public static function from(array $payload): Render
     {
+        if (!\array_key_exists('snippet_id', $payload)) {
+            throw new \BadMethodCallException("Key 'snippet_id' does not exist");
+        }
+
         if (!\array_key_exists('content', $payload)) {
             throw new \BadMethodCallException("Key 'content' does not exist");
         }
 
-        return new Render($payload['content'], $payload['snippet_id'] ?? null);
+        return new Render($payload['snippet_id'], $payload['content']);
     }
 
     public function getContent(): string
@@ -33,13 +37,8 @@ class Render implements Resource
         return $this->content;
     }
 
-    public function getSnippetId(): ?int
+    public function getSnippetId(): int
     {
         return $this->snippetId;
-    }
-
-    public function hasSnippetId(): bool
-    {
-        return $this->snippetId !== null;
     }
 }

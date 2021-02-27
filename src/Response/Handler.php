@@ -3,7 +3,6 @@
 namespace Jahuty\Response;
 
 use Jahuty\Action\{Action, Index};
-use Jahuty\Collection\Collection;
 use Jahuty\Resource\{Factory, Resource};
 use Psr\Http\Message\ResponseInterface as Response;
 
@@ -13,9 +12,13 @@ class Handler
 
     public function handle(Action $action, Response $response)
     {
-        if (null === ($name = $this->getResourceName($action, $response))) {
-            throw new \OutOfBoundsException('Unexpected response');
+        if ($this->isUnexpected($response)) {
+            throw new \OutOfBoundsException(
+                'Response is unexpected and neither a success nor a problem'
+            );
         }
+
+        $name = $this->isSuccess($response) ? $action->getResource() : 'problem';
 
         $payload = $this->parse($response->getBody());
 
@@ -32,7 +35,7 @@ class Handler
         return $result;
     }
 
-    private function createCollection(string $name, array $payload): Collection
+    private function createCollection(string $name, array $payload): array
     {
         $resources = [];
 
@@ -40,25 +43,12 @@ class Handler
             $resources[] = $this->createResource($name, $item);
         }
 
-        return new Collection($resources);
+        return $resources;
     }
 
     private function createResource(string $name, array $payload): Resource
     {
         return $this->resources->create($name, $payload);
-    }
-
-    private function getResourceName(Action $action, Response $response): ?string
-    {
-        $name = null;
-
-        if ($this->isSuccess($response)) {
-            $name = $action->getResource();
-        } elseif ($this->isProblem($response)) {
-            $name = 'problem';
-        }
-
-        return $name;
     }
 
     private function hasSuccessfulStatusCode(Response $response): bool
@@ -98,6 +88,11 @@ class Handler
     {
         return !$this->hasSuccessfulStatusCode($response) &&
             $this->hasProblemJsonContentType($response);
+    }
+
+    private function isUnexpected(Response $response): bool
+    {
+        return !$this->isSuccess($response) && !$this->isProblem($response);
     }
 
     private function parse(string $body): array

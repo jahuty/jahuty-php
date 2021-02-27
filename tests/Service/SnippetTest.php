@@ -4,7 +4,6 @@ namespace Jahuty\Service;
 
 use Jahuty\Action\{Index, Show};
 use Jahuty\Cache\Ttl;
-use Jahuty\Collection\Collection;
 use Jahuty\Client;
 
 class SnippetTest extends \PHPUnit\Framework\TestCase
@@ -55,13 +54,11 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         // Without a valid return value, a TypeError is raised. It is not clear
         // to me why only this test, and not the others included in this file,
         // requires a return value.
-        $collection = new Collection([]);
-
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('request')
             ->with($this->equalTo($action))
-            ->will($this->returnValue($collection));
+            ->will($this->returnValue([]));
 
         (new Snippet($client))->renders('foo');
     }

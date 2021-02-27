@@ -4,7 +4,6 @@ namespace Jahuty\Response;
 
 use GuzzleHttp\Psr7\Response;
 use Jahuty\Action\{Index, Show};
-use Jahuty\Collection\Collection;
 use Jahuty\Resource\{Problem, Render};
 
 class HandlerTest extends \PHPUnit\Framework\TestCase
@@ -72,8 +71,8 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
             '[{ "id": 1, "content": "foo" }, { "id": 2, "content": "bar" }]'
         );
 
-        $resource = (new Handler())->handle($action, $response);
+        $result = (new Handler())->handle($action, $response);
 
-        $this->assertInstanceOf(Collection::class, $resource);
+        $this->assertTrue(is_array($result));
     }
 }

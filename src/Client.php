@@ -43,7 +43,15 @@ class Client
         return $this->services->$name;
     }
 
-    public function fetch(Action\Action $action, Cache\Ttl $ttl): Resource\Resource
+    /**
+     * Reads an action from the cache or executes it, writes the value to
+     * the cache, and returns the value.
+     *
+     * @param   Action\Action  $action  the action to fetch
+     * @param   Cache\Ttl      $ttl     the time-to-live when writing to cache
+     * @return  array|Resource
+     */
+    public function fetch(Action\Action $action, Cache\Ttl $ttl)
     {
         if (null === $this->cache) {
             $this->cache = new Cache\Manager(
@@ -56,6 +64,12 @@ class Client
         return $this->cache->fetch($action, $ttl);
     }
 
+    /**
+     * Executes an action against the API and returns result.
+     *
+     * @param   Action\Action  $action
+     * @return  array|Resource\Resource
+     */
     public function request(Action\Action $action)
     {
         if (null === $this->requests) {

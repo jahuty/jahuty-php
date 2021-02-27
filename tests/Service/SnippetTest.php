@@ -5,6 +5,7 @@ namespace Jahuty\Service;
 use Jahuty\Action\{Index, Show};
 use Jahuty\Cache\Ttl;
 use Jahuty\Client;
+use Jahuty\Resource\Render;
 
 class SnippetTest extends \PHPUnit\Framework\TestCase
 {
@@ -12,10 +13,13 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
     {
         $action = new Show('render', 1);
 
+        $render = new Render(1, 'foo');
+
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($action), $this->isInstanceOf(Ttl::class));
+            ->with($this->equalTo($action), $this->isInstanceOf(Ttl::class))
+            ->will($this->returnValue($render));
 
         (new Snippet($client))->render(1);
     }
@@ -24,10 +28,13 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
     {
         $action = new Show('render', 1, ['params' => '{"foo":"bar"}']);
 
+        $render = new Render(1, 'foo');
+
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($action), $this->isInstanceOf(Ttl::class));
+            ->with($this->equalTo($action), $this->isInstanceOf(Ttl::class))
+            ->will($this->returnValue($render));
 
         (new Snippet($client))->render(1, ['params' => ['foo' => 'bar']]);
     }
@@ -36,10 +43,13 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
     {
         $action = new Show('render', 1, ['params' => '{"foo":"bar"}']);
 
+        $render = new Render(1, 'foo');
+
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($action), $this->equalTo(new Ttl(60)));
+            ->with($this->equalTo($action), $this->equalTo(new Ttl(60)))
+            ->will($this->returnValue($render));
 
         (new Snippet($client))->render(1, [
             'params' => ['foo' => 'bar'],
@@ -51,9 +61,6 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
     {
         $action = new Index('render', ['tag' => 'foo']);
 
-        // Without a valid return value, a TypeError is raised. It is not clear
-        // to me why only this test, and not the others included in this file,
-        // requires a return value.
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
             ->method('request')

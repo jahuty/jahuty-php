@@ -22,7 +22,18 @@ class Manager
         $this->ttl    = $ttl;
     }
 
-    public function fetch(Action $action, Ttl $ttl): Resource
+    /**
+     * Reads and writes an action to the cache.
+     *
+     * In the case of a cache hit, the action's cached value is returned without
+     * executing the action. In the case of a cache miss, the action will be
+     * executed and the value cached and returned.
+     *
+     * @param   Action  $action  the action to fetch
+     * @param   Ttl     $ttl     the action's time-to-live when writing to cache
+     * @return  Array|Resource
+     */
+    public function fetch(Action $action, Ttl $ttl)
     {
         if ($ttl->isNull()) {
             $ttl = $this->ttl;
@@ -30,33 +41,42 @@ class Manager
 
         $key = $this->getKey($action);
 
-        if (null === ($resource = $this->cache->get($key))) {
-            $resource = $this->client->request($action);
-            $this->cache->set($key, $resource, $ttl->toSeconds());
+        $value = $this->cache->get($key);
+
+        if ($value === null) {
+            $value = $this->client->request($action);
+            $this->cache->set($key, $value, $ttl->toSeconds());
         }
 
-        return $resource;
+        return $value;
     }
 
     /**
-     * Returns a cache key for a resource, id, and params combination.
+     * Returns a unique cache key for an action.
      *
-     * I use an md5 hash to allow inputs of any length and outputs of a known
-     * (and valid) length. According to PSR-16, valid keys are, "the characters
-     * A-Z, a-z, 0-9, _, and . in any order in UTF-8 encoding and a length of up
-     * to 64 characters."
+     * @return  string
      */
-    private function getKey(Show $action): string
+    private function getKey(Action $action): string
     {
-        $segments = [
-             'jahuty',
-             $action->getResource(),
-             $action->getId(),
-             json_encode($action->getParams(), JSON_THROW_ON_ERROR)
-        ];
+        // Start with the action's resource name and parameters array.
+        $prefixes = [$action->getResource()];
+        $infixes  = [];
+        $suffixes = [json_encode($action->getParams(), JSON_THROW_ON_ERROR)];
 
-        $key = implode('\\', $segments);
+        // Add in the unique identifier of show actions.
+        if ($action instanceof Show) {
+            $infixes = [$action->getId()];
+        }
 
-        return md5($key);
+        $segments = array_merge($prefixes, $infixes, $suffixes);
+        $slug     = implode('/', $segments);
+
+        // Hash the slug to produce a key of known length and valid characters.
+        $hash = md5($slug);
+
+        // Prefix the key to prevent (unlikely) collisions with other libraries.
+        $key = "jahuty_{$hash}";
+
+        return $key;
     }
 }

@@ -8,6 +8,9 @@ use Jahuty\Cache\Ttl;
 
 class Snippet extends Service
 {
+    /**
+     * Renders a snippet.
+     */
     public function render(int $id, array $options = []): Resource
     {
         $defaults = [
@@ -19,10 +22,7 @@ class Snippet extends Service
 
         $params = [];
         if ($options['params']) {
-            $params['params'] = \json_encode(
-                $options['params'],
-                JSON_THROW_ON_ERROR
-            );
+            $params['params'] = $this->encode($options['params']);
         }
 
         $action = new Show('render', $id, $params);
@@ -31,10 +31,31 @@ class Snippet extends Service
         return $this->client->fetch($action, $ttl);
     }
 
-    public function renders(string $tag): array
+    /**
+     * Renders a group of snippets.
+     */
+    public function renders(string $tag, array $options = []): array
     {
-        $action = new Index('render', ['tag' => $tag]);
+        $defaults = [
+            'params' => null,
+            'ttl'    => null
+        ];
 
-        return $this->client->request($action);
+        $options = \array_merge($defaults, $options);
+
+        $params = ['tag' => $tag];
+        if ($options['params']) {
+            $params['params'] = $this->encode($options['params']);
+        }
+
+        $action = new Index('render', $params);
+        $ttl    = new Ttl($options['ttl']);
+
+        return $this->client->fetch($action, $ttl);
+    }
+
+    private function encode(array $params): string
+    {
+        return \json_encode($params, JSON_THROW_ON_ERROR);
     }
 }

@@ -57,16 +57,41 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testRenders(): void
+    public function testRendersWhenParamsDoNotExist(): void
     {
         $action = new Index('render', ['tag' => 'foo']);
 
         $client = $this->createMock(Client::class);
         $client->expects($this->once())
-            ->method('request')
+            ->method('fetch')
             ->with($this->equalTo($action))
             ->will($this->returnValue([]));
 
         (new Snippet($client))->renders('foo');
+    }
+
+    public function testRendersWhenParamsDoExist(): void
+    {
+        $action = new Index('render', [
+            'tag'    => 'foo',
+            'params' => '{"*":{"foo":"bar"},"1":{"foo":"baz"}}'
+        ]);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('fetch')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue([]));
+
+        (new Snippet($client))->renders('foo', [
+            'params' => [
+                '*' => [
+                    'foo' => 'bar'
+                ],
+                1 => [
+                    'foo' => 'baz'
+                ]
+            ]
+        ]);
     }
 }

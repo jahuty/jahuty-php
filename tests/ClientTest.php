@@ -53,53 +53,6 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testFetchReturnsResourceWhenSuccess(): void
-    {
-        $id      = 1;
-        $content = 'foo';
-
-        $this->setupEndpointWithSuccess($id, $content);
-
-        // Mock the cache to store the returned value.
-        $cache = $this->createMock(CacheInterface::class);
-        $cache->expects($this->once())->method('set');
-
-        $client = new Client('1234abcd', [
-            'base_uri' => self::$server->getServerRoot(),
-            'cache'    => $cache
-        ]);
-
-        $action = new Show('render', $id);
-
-        $expected = new Render($id, $content);
-        $actual   = $client->fetch($action, $this->createMock(Ttl::class));
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testFetchThrowsExceptionWhenProblem(): void
-    {
-        $id = 1;
-
-        $this->expectException(Exception\Error::class);
-
-        $this->setupEndpointWithProblem($id);
-
-        // Mock the cache NOT TO store the returned problem.
-        $cache = $this->createMock(CacheInterface::class);
-        $cache->expects($this->never())->method('set');
-
-        $client = new Client('1234abcd', [
-            'base_uri' => self::$server->getServerRoot(),
-            'cache'    => $cache
-        ]);
-
-        $client->fetch(
-            new Show('render', $id),
-            $this->createMock(Ttl::class)
-        );
-    }
-
     public function testRequestThrowsExceptionWhenProblem(): void
     {
         $id = 1;

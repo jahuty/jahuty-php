@@ -10,12 +10,12 @@ This library requires [PHP 7.3+](https://secure.php.net).
 
 It is multi-platform, and we strive to make it run equally well on Windows, Linux, and OSX.
 
-It should be installed via [Composer](https://getcomposer.org). To do so, add the following line to the `require` section of your `composer.json` file (where `x` is the latest major version), and run `composer update`:
+It should be installed via [Composer](https://getcomposer.org). To do so, add the following line to the `require` section of your `composer.json` file, and run `composer update`:
 
 ```javascript
 {
    "require": {
-       "jahuty/jahuty-php": "^x"
+       "jahuty/jahuty-php": "^5.2"
    }
 }
 ```
@@ -57,9 +57,21 @@ In an HTML view:
 </body>
 ```
 
+You can also use tags to select a collection of snippets with the `snippets->allRenders()` method:
+
+```php
+$jahuty = new \Jahuty\Client('YOUR_API_KEY');
+
+$renders = $jahuty->snippets->allRenders('YOUR_TAG');
+
+foreach ($renders as $render) {
+  echo $render;
+}
+```
+
 ## Parameters
 
-You can [pass parameters](https://docs.jahuty.com/liquid/parameters) into your snippet using the `params` key in the options associative array:
+You can [pass parameters](https://docs.jahuty.com/liquid/parameters) into your renders using the `params` key in the options associative array.
 
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
@@ -77,6 +89,40 @@ The parameters above would be equivalent to [assigning the variables](https://do
 {% assign foo = "bar" %}
 ```
 
+If you're rendering a collection of snippets, the first dimension of the `params` key determines the parameters' scope. Use the asterisk key (`*`) to pass the same parameters to all snippets, or use the snippet id as key to pass parameters to a specific snippet.
+
+```php
+$jahuty = new \Jahuty\Client('YOUR_API_KEY');
+
+$renders = $jahuty->snippets->allRenders('YOUR_TAG', [
+  'params' => [
+    '*' => [
+      'foo' => 'bar'
+    ],
+    1 => [
+      'baz' => 'qux'
+    ]
+  ]
+]);
+```
+
+The two parameter lists will be recursively merged, and the snippet's parameters will take precedence. In the example below, the variable `foo` will be assigned the value `"bar"` for all snippets, except for snippet 1, where it will be assigned the value `"qux"`:
+
+```php
+$jahuty = new \Jahuty\Client('YOUR_API_KEY');
+
+$renders = $jahuty->snippets->allRenders('YOUR_TAG', [
+  'params' => [
+    '*' => [
+      'foo' => 'bar'
+    ],
+    1 => [
+      'foo' => 'qux'
+    ]
+  ]
+]);
+```
+
 ## Caching
 
 Caching controls how frequently this library requests content from Jahuty's API.
@@ -91,11 +137,11 @@ By default, Jahuty uses an in-memory cache to avoid requesting the same render m
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
 
-// This call sends a synchronous API request; caches the result in memory; and,
-// returns the result to the caller.
+// sends a synchronous API request; caches the result in memory; and, returns
+// the result
 $render1 = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 
-// This call skips sending an API request and uses the cached value instead.
+// skips sending an API request and uses the cached value instead
 $render2 = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 ```
 
@@ -152,6 +198,26 @@ $render = $jahuty->snippets->render(1, [
 ```
 
 If a render's TTL is set, it will take precedence over the library's default TTL and the caching implementation's TTL.
+
+### Caching collections
+
+By default, this library will cache each render returned by `allRenders()`:
+
+```php
+$jahuty = new \Jahuty\Client('YOUR_API_KEY');
+
+// sends a network request, caches each render, and returns the collection
+$jahuty->snippets->allRenders('YOUR_TAG');
+
+// ... later in your application
+
+// if this snippet exists in the collection, the cached value will be used
+$render = $jahuty->snippets->render(YOUR_SNIPPET_ID);
+```
+
+This is a powerful feature. Using tags and the `allRenders()` method, you can render and cache the content of an entire application with a single network request. Then, any call to `render()` a snippet in the collection will load its content from the cache instead of Jahuty's API.
+
+When `allRenders()` can be called outside your request cycle (e.g., a background job) periodically, you can turn your cache into your content storage mechanism. You can render and cache your dynamic content as frequently as your like without any hit to your application's response time.
 
 ### Disabling caching
 

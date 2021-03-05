@@ -2,6 +2,8 @@
 
 namespace Jahuty;
 
+use Psr\SimpleCache\CacheInterface;
+
 /**
  * Sends requests to Jahuty's API.
  *
@@ -9,38 +11,47 @@ namespace Jahuty;
  */
 class Client
 {
+    private $apiClient;
+
+    private $apiKey;
+
+    private $baseUri = Jahuty::BASE_URI;
+
     private $cache;
-
-    private $client;
-
-    private $key;
 
     private $requests;
 
     private $responses;
 
-    private $options = [
-        'cache'    => null,
-        'ttl'      => null,
-        'base_uri' => Jahuty::BASE_URI
-    ];
+    private $services = [];
 
-    private $services;
+    private $ttl;
 
-    public function __construct(string $key, array $options = [])
+    public function __construct(string $apiKey, array $options = [])
     {
-        $this->key = $key;
+        $this->apiKey = $apiKey;
 
-        $this->setOptions($options);
+        $this->cache = new Cache\Memory();
+        $this->ttl   = new Cache\Ttl(null);
+
+        $this->unpackOptions($options);
     }
 
     public function __get(string $name): Service\Service
     {
-        if (null === $this->services) {
-            $this->services = new Service\Factory($this);
+        if ($name !== 'snippets') {
+            throw new \OutOfBoundsException("Service '$name' not found");
         }
 
-        return $this->services->$name;
+        if (!\array_key_exists($name, $this->services)) {
+            $this->services[$name] = new Service\Snippet(
+                $this,
+                $this->cache,
+                $this->ttl
+            );
+        }
+
+        return $this->services[$name];
     }
 
     /**
@@ -52,16 +63,16 @@ class Client
     public function request(Action\Action $action)
     {
         if (null === $this->requests) {
-            $this->requests = new Request\Factory($this->getOption('base_uri'));
+            $this->requests = new Request\Factory($this->baseUri);
         }
 
         $request = $this->requests->new($action);
 
-        if (null === $this->client) {
-            $this->client = new Api\Client($this->key);
+        if (null === $this->apiClient) {
+            $this->apiClient = new Api\Client($this->apiKey);
         }
 
-        $response = $this->client->send($request);
+        $response = $this->apiClient->send($request);
 
         if (null === $this->responses) {
             $this->responses = new Response\Handler();
@@ -76,32 +87,52 @@ class Client
         return $result;
     }
 
-    private function getOption(string $name)
+    public function setBaseUri(string $baseUri): self
     {
-        if (!\array_key_exists($name, $this->options)) {
-            throw new \OutOfBoundsException(
-                "Option '$name' does not exist"
-            );
-        }
+        $this->baseUri = $baseUri;
 
-        return $this->options[$name];
+        return $this;
     }
 
-    private function setOptions(array $options): void
+    public function setCache(CacheInterface $cache): self
     {
-        $options = \array_merge($this->options, $options);
+        $this->cache = $cache;
 
-        if ($options['cache'] !== null &&
-            !($options['cache'] instanceof \Psr\SimpleCache\CacheInterface)
-        ) {
-            throw new \InvalidArgumentException(
-                "Option 'cache' must be null or CacheInterface"
-            );
+        return $this;
+    }
+
+    public function setTtl($ttl): self
+    {
+        $this->cache = new Cache\Ttl($ttl);
+
+        return $this;
+    }
+
+    /**
+     * Unpacks the options array into object properties.
+     *
+     * @param   array  $options
+     *   @option  string  base_uri  the base uri of API requests (optional; if
+     *     omitted, defaults to the value of Jahuty::BASE_URI constant)
+     *   @option  CacheInterface  cache  the client's cache (optional; if
+     *     ommitted, defaults to in-memory cache)
+     *   @option  int|DateTime  ttl  the default time-to-live when writing
+     *     to the cache (optional; if omitted, uses the method's $ttl argument
+     *     or the cache's default setting, in that order)
+     * @return  void
+     */
+    private function unpackOptions(array $options): void
+    {
+        if (isset($options['base_uri'])) {
+            $this->setBaseUri($options['base_uri']);
         }
 
-        // Accepts null, int, or DateInterval.
-        $options['ttl'] = new Cache\Ttl($options['ttl']);
+        if (isset($options['cache'])) {
+            $this->setCache($options['cache']);
+        }
 
-        $this->options = $options;
+        if (isset($options['ttl'])) {
+            $this->setTtl($options['ttl']);
+        }
     }
 }

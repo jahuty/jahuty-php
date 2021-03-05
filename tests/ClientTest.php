@@ -4,7 +4,6 @@ namespace Jahuty;
 
 use donatj\MockWebServer\{MockWebServer, Response};
 use Jahuty\Action\Show;
-use Jahuty\Cache\Ttl;
 use Jahuty\Resource\Render;
 use Psr\SimpleCache\CacheInterface;
 
@@ -23,14 +22,14 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         self::$server->stop();
     }
 
-    public function testConstructThrowsExceptionWhenCacheInvalid(): void
+    public function testConstructThrowsExceptionWhenCacheIsInvalid(): void
     {
-        $this->expectException(\InvalidARgumentException::class);
+        $this->expectException(\TypeError::class);
 
         (new Client('foo', ['cache' => 'foo']));
     }
 
-    public function testConstructThrowsExceptionWhenTtlInvalid(): void
+    public function testConstructThrowsExceptionWhenTtlIsInvalid(): void
     {
         $this->expectException(\InvalidARgumentException::class);
 
@@ -85,6 +84,29 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $actual   = $client->request($action);
 
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testSetBaseUri(): void
+    {
+        $client = new Client('foo');
+
+        $this->assertSame($client, $client->setBaseUri('https://google.com'));
+    }
+
+    public function testSetCache(): void
+    {
+        $client = new Client('foo');
+
+        $cache = $this->createMock(CacheInterface::class);
+
+        $this->assertSame($client, $client->setCache($cache));
+    }
+
+    public function testSetTtl(): void
+    {
+        $client = new Client('foo');
+
+        $this->assertSame($client, $client->setTtl(60));
     }
 
     private function setupEndpointWithSuccess($id = 1, $content = 'foo'): void

@@ -26,7 +26,7 @@ class Ttl
 {
     private $value;
 
-    public function __construct($value)
+    public function __construct($value = null)
     {
         if ($value !== null && !is_int($value) && !($value instanceof \DateInterval)) {
             throw new \InvalidArgumentException(

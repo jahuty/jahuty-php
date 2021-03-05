@@ -40,7 +40,20 @@ class ProblemTest extends \PHPUnit\Framework\TestCase
 
     public function testFrom(): void
     {
-        $this->assertInstanceOf(Problem::class, Problem::from($this->payload));
+        $expected = new Problem(1, 'foo', 'bar');
+        $actual   = Problem::from($this->payload);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testFromAcceptsUnusedAttributes(): void
+    {
+        $payload = \array_merge($this->payload, ['foo' => 'bar']);
+
+        $expected = new Problem(1, 'foo', 'bar');
+        $actual   = Problem::from($payload);
+
+        $this->assertEquals($expected, $actual);
     }
 
     public function testGetDetail(): void

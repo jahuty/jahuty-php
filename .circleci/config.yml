@@ -22,7 +22,7 @@ jobs:
             # Fallback to using the latest cache if no exact match is found.
             - v1-dependencies-
 
-      - run: composer install -n --prefer-lowest
+      - run: composer update --prefer-lowest --prefer-stable --no-interaction
 
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
@@ -50,7 +50,7 @@ jobs:
             # Fallback to using the latest cache if no exact match is found.
             - v1-dependencies-
 
-      - run: composer install -n --prefer-stable
+      - run: composer update --no-interaction
 
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}

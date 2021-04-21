@@ -30,7 +30,26 @@ jobs:
             - ./vendor
 
       - run: ./vendor/bin/phpcs .
-      - run: XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover=coverage.xml
+      - run: ./vendor/bin/phpunit
+  build74:
+    docker:
+      - image: circleci/php:7.4-node-browsers
+    steps:
+      - checkout
+
+      - run: sudo apt update
+      - run: sudo docker-php-ext-install zip sockets
+
+      # Download and cache dependencies.
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # Fallback to using the latest cache if no exact match is found.
+            - v1-dependencies-
+
+      - run: composer update --no-interaction
+      - run: ./vendor/bin/phpcs .
+      - run: ./vendor/bin/phpunit
   build8:
     docker:
       - image: circleci/php:8.0-node-browsers
@@ -48,12 +67,6 @@ jobs:
             - v1-dependencies-
 
       - run: composer update --no-interaction
-
-      - save_cache:
-          key: v1-dependencies-{{ checksum "composer.json" }}
-          paths:
-            - ./vendor
-
       - run: ./vendor/bin/phpcs .
       - run: XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-clover=coverage.xml
 

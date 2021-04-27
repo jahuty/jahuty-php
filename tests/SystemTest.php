@@ -22,7 +22,6 @@ class SystemTest extends \PHPUnit\Framework\TestCase
             ]
         ]);
 
-        $this->assertCount(2, $renders);
         $this->assertContainsOnlyInstancesOf(Resource\Render::class, $renders);
 
         // Rendering a snippet in the collection using the _same_ parameters
@@ -58,6 +57,20 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $actual  = ($end - $start) * 1000;
 
         $this->assertGreaterThan($minimum, $actual);
+    }
+
+    public function testAllRendersWithLatest(): void
+    {
+        $renders = $this->jahuty->snippets->allRenders('test', [
+            'latest' => true
+        ]);
+
+        $last = end($renders);
+
+        $this->assertEquals(
+            '<p>This content is latest.</p>',
+            $last->getContent()
+        );
     }
 
     public function testRenderWithoutParameters(): void
@@ -110,6 +123,16 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $actual  = ($end - $start) * 1000;
 
         $this->assertGreaterThan($minimum, $actual);
+    }
+
+    public function testRenderWithLatest(): void
+    {
+        $render = $this->jahuty->snippets->render(102, ['latest' => true]);
+
+        $this->assertEquals(
+            '<p>This content is latest.</p>',
+            $render->getContent()
+        );
     }
 
     public function testProblem(): void

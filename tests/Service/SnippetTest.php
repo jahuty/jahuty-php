@@ -163,4 +163,26 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
 
         $service->render(1, ['ttl' => $ttl]);
     }
+
+    public function testRenderWhenLatestExists(): void
+    {
+        // the expected action
+        $action = new Show('render', 1, ['latest' => 1]);
+
+        // the render to return
+        $render = new Render(1, 'foo');
+
+        // a cache miss
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue($render));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->render(1, ['latest' => true]);
+    }
 }

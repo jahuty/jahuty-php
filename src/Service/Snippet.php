@@ -79,6 +79,8 @@ class Snippet extends Service
      * @param  array  $options {
      *   params: array  an array of parameters to pass to the render
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
+     *   latest: bool  a flag indicating whether or not to render the latest
+     *     content version instead of the published version
      * }
      * @return  Resource
      */
@@ -86,7 +88,8 @@ class Snippet extends Service
     {
         [
             'ttl'    => $ttl,
-            'params' => $renderParams
+            'params' => $renderParams,
+            'latest' => $isLatest
         ] = $this->unpackOptions($options);
 
         $cacheKey = $this->getCacheKey($snippetId, $renderParams);
@@ -98,6 +101,9 @@ class Snippet extends Service
         $requestParams = [];
         if ($renderParams) {
             $requestParams['params'] = $this->encode($renderParams);
+        }
+        if ($isLatest) {
+            $requestParams['latest'] = 1;
         }
 
         $action = new Show('render', $snippetId, $requestParams);
@@ -131,7 +137,8 @@ class Snippet extends Service
     {
         $defaults = [
             'params' => null,
-            'ttl'    => null
+            'ttl'    => null,
+            'latest' => false
         ];
 
         $results = \array_merge($defaults, $options);

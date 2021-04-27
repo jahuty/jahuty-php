@@ -12,14 +12,21 @@ class Snippet extends Service
 {
     private $cache;
 
+    private $preferLatestContent;
+
     private $ttl;
 
-    public function __construct(Client $client, CacheInterface $cache, Ttl $ttl)
-    {
+    public function __construct(
+        Client $client,
+        CacheInterface $cache,
+        Ttl $ttl,
+        bool $preferLatestContent = false
+    ) {
         parent::__construct($client);
 
         $this->cache = $cache;
-        $this->ttl   = $ttl;
+        $this->ttl = $ttl;
+        $this->preferLatestContent = $preferLatestContent;
     }
 
     /**
@@ -43,14 +50,14 @@ class Snippet extends Service
         [
             'ttl'    => $ttl,
             'params' => $allParams,
-            'latest' => $isLatest
+            'latest' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
         $requestParams = ['tag' => $tag];
         if ($allParams) {
             $requestParams['params'] = $this->encode($allParams);
         }
-        if ($isLatest) {
+        if ($preferLatestContent || $this->preferLatestContent) {
             $requestParams['latest'] = 1;
         }
 
@@ -95,7 +102,7 @@ class Snippet extends Service
         [
             'ttl'    => $ttl,
             'params' => $renderParams,
-            'latest' => $isLatest
+            'latest' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
         $cacheKey = $this->getCacheKey($snippetId, $renderParams);
@@ -108,7 +115,7 @@ class Snippet extends Service
         if ($renderParams) {
             $requestParams['params'] = $this->encode($renderParams);
         }
-        if ($isLatest) {
+        if ($preferLatestContent || $this->preferLatestContent) {
             $requestParams['latest'] = 1;
         }
 

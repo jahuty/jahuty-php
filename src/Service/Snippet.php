@@ -33,6 +33,8 @@ class Snippet extends Service
      *   params: array  an array of parameters to pass to the renders, indexed
      *     by snippet id (use the "*" index to pass parameters to all snippets)
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
+     *   latest: bool  a flag indicating whether or not to render the latest
+     *     content version instead of the published version
      * }
      * @return  array
      */
@@ -40,12 +42,16 @@ class Snippet extends Service
     {
         [
             'ttl'    => $ttl,
-            'params' => $allParams
+            'params' => $allParams,
+            'latest' => $isLatest
         ] = $this->unpackOptions($options);
 
         $requestParams = ['tag' => $tag];
         if ($allParams) {
             $requestParams['params'] = $this->encode($allParams);
+        }
+        if ($isLatest) {
+            $requestParams['latest'] = 1;
         }
 
         $action = new Index('render', $requestParams);

@@ -67,6 +67,25 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
+    public function testRendersWithLatest(): void
+    {
+        // the expected action, note the json-encoded params)
+        $action = new Index('render', ['tag' => 'foo', 'latest' => 1]);
+
+        // a no-op cache
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue([]));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->allRenders('foo', ['latest' => true]);
+    }
+
     public function testRenderReturnsRenderWhenCacheMiss(): void
     {
         // the action to request

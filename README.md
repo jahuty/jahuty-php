@@ -15,7 +15,7 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 ```javascript
 {
    "require": {
-       "jahuty/jahuty-php": "^5.2"
+       "jahuty/jahuty-php": "^5.3"
    }
 }
 ```

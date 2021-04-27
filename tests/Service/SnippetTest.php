@@ -69,7 +69,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
 
     public function testRendersWithLatest(): void
     {
-        // the expected action, note the json-encoded params)
+        // the expected action
         $action = new Index('render', ['tag' => 'foo', 'latest' => 1]);
 
         // a no-op cache
@@ -83,7 +83,9 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
 
         $service = new Snippet($client, $cache, new Ttl());
 
-        $service->allRenders('foo', ['latest' => true]);
+        $service->allRenders('foo', [
+            'prefer_latest_content' => true
+        ]);
     }
 
     public function testRenderReturnsRenderWhenCacheMiss(): void
@@ -202,6 +204,6 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
 
         $service = new Snippet($client, $cache, new Ttl());
 
-        $service->render(1, ['latest' => true]);
+        $service->render(1, ['prefer_latest_content' => true]);
     }
 }

@@ -62,7 +62,7 @@ class SystemTest extends \PHPUnit\Framework\TestCase
     public function testAllRendersWithLatest(): void
     {
         $renders = $this->jahuty->snippets->allRenders('test', [
-            'latest' => true
+            'prefer_latest_content' => true
         ]);
 
         $last = end($renders);
@@ -127,7 +127,9 @@ class SystemTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderWithLatest(): void
     {
-        $render = $this->jahuty->snippets->render(102, ['latest' => true]);
+        $render = $this->jahuty->snippets->render(102, [
+            'prefer_latest_content' => true
+        ]);
 
         $this->assertEquals(
             '<p>This content is latest.</p>',

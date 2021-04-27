@@ -40,17 +40,17 @@ class Snippet extends Service
      *   params: array  an array of parameters to pass to the renders, indexed
      *     by snippet id (use the "*" index to pass parameters to all snippets)
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
-     *   latest: bool  a flag indicating whether or not to render the latest
-     *     content version instead of the published version
+     *   prefer_latest_content: bool  a flag indicating whether or not to render
+     *     the latest content version instead of the published version
      * }
      * @return  array
      */
     public function allRenders(string $tag, array $options = []): array
     {
         [
-            'ttl'    => $ttl,
+            'ttl' => $ttl,
             'params' => $allParams,
-            'latest' => $preferLatestContent
+            'prefer_latest_content' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
         $requestParams = ['tag' => $tag];
@@ -92,17 +92,17 @@ class Snippet extends Service
      * @param  array  $options {
      *   params: array  an array of parameters to pass to the render
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
-     *   latest: bool  a flag indicating whether or not to render the latest
-     *     content version instead of the published version
+     *   prefer_latest_content: bool  a flag indicating whether or not to render
+     *     the latest content version instead of the published version
      * }
      * @return  Resource
      */
     public function render(int $snippetId, array $options = []): Resource
     {
         [
-            'ttl'    => $ttl,
+            'ttl' => $ttl,
             'params' => $renderParams,
-            'latest' => $preferLatestContent
+            'prefer_latest_content' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
         $cacheKey = $this->getCacheKey($snippetId, $renderParams);
@@ -150,8 +150,8 @@ class Snippet extends Service
     {
         $defaults = [
             'params' => null,
-            'ttl'    => null,
-            'latest' => false
+            'ttl' => null,
+            'prefer_latest_content' => false
         ];
 
         $results = \array_merge($defaults, $options);

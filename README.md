@@ -15,7 +15,7 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 ```javascript
 {
    "require": {
-       "jahuty/jahuty-php": "^5.2"
+       "jahuty/jahuty-php": "^5.3"
    }
 }
 ```
@@ -67,6 +67,30 @@ $renders = $jahuty->snippets->allRenders('YOUR_TAG');
 foreach ($renders as $render) {
   echo $render;
 }
+```
+
+## Content versions
+
+Oftentimes, you'd like to render a snippet's _latest_ content in _development_ and its _published_ content in _production_.
+
+This library will render a snippet's _published_ content by default, but you can use the `prefer_latest_content` configuration option to render the _latest_ content instead:
+
+```php
+$jahuty = new \Jahuty\Client('YOUR_API_KEY', [
+  'prefer_latest_content' => true
+]);
+```
+
+You can also prefer the latest content (or not) for a single render:
+
+```php
+// Render the _published_ content for all snippets...
+$jahuty = new \Jahuty\Client('YOUR_API_KEY');
+
+// ... except, render the _latest_ content for this one.
+$render = $jahuty->snippets->render(YOUR_SNIPPET_ID, [
+  'prefer_latest_content' => true
+]);
 ```
 
 ## Parameters

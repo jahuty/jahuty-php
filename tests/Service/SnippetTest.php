@@ -67,6 +67,27 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
+    public function testRendersWithLatest(): void
+    {
+        // the expected action
+        $action = new Index('render', ['tag' => 'foo', 'latest' => 1]);
+
+        // a no-op cache
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue([]));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->allRenders('foo', [
+            'prefer_latest_content' => true
+        ]);
+    }
+
     public function testRenderReturnsRenderWhenCacheMiss(): void
     {
         // the action to request
@@ -162,5 +183,27 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service = new Snippet($client, $cache, new Ttl(120));
 
         $service->render(1, ['ttl' => $ttl]);
+    }
+
+    public function testRenderWhenLatestExists(): void
+    {
+        // the expected action
+        $action = new Show('render', 1, ['latest' => 1]);
+
+        // the render to return
+        $render = new Render(1, 'foo');
+
+        // a cache miss
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue($render));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->render(1, ['prefer_latest_content' => true]);
     }
 }

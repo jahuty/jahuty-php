@@ -12,14 +12,21 @@ class Snippet extends Service
 {
     private $cache;
 
+    private $preferLatestContent;
+
     private $ttl;
 
-    public function __construct(Client $client, CacheInterface $cache, Ttl $ttl)
-    {
+    public function __construct(
+        Client $client,
+        CacheInterface $cache,
+        Ttl $ttl,
+        bool $preferLatestContent = false
+    ) {
         parent::__construct($client);
 
         $this->cache = $cache;
-        $this->ttl   = $ttl;
+        $this->ttl = $ttl;
+        $this->preferLatestContent = $preferLatestContent;
     }
 
     /**
@@ -33,19 +40,25 @@ class Snippet extends Service
      *   params: array  an array of parameters to pass to the renders, indexed
      *     by snippet id (use the "*" index to pass parameters to all snippets)
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
+     *   prefer_latest_content: bool  a flag indicating whether or not to render
+     *     the latest content version instead of the published version
      * }
      * @return  array
      */
     public function allRenders(string $tag, array $options = []): array
     {
         [
-            'ttl'    => $ttl,
-            'params' => $allParams
+            'ttl' => $ttl,
+            'params' => $allParams,
+            'prefer_latest_content' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
         $requestParams = ['tag' => $tag];
         if ($allParams) {
             $requestParams['params'] = $this->encode($allParams);
+        }
+        if ($preferLatestContent || $this->preferLatestContent) {
+            $requestParams['latest'] = 1;
         }
 
         $action = new Index('render', $requestParams);
@@ -79,14 +92,17 @@ class Snippet extends Service
      * @param  array  $options {
      *   params: array  an array of parameters to pass to the render
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
+     *   prefer_latest_content: bool  a flag indicating whether or not to render
+     *     the latest content version instead of the published version
      * }
      * @return  Resource
      */
     public function render(int $snippetId, array $options = []): Resource
     {
         [
-            'ttl'    => $ttl,
-            'params' => $renderParams
+            'ttl' => $ttl,
+            'params' => $renderParams,
+            'prefer_latest_content' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
         $cacheKey = $this->getCacheKey($snippetId, $renderParams);
@@ -98,6 +114,9 @@ class Snippet extends Service
         $requestParams = [];
         if ($renderParams) {
             $requestParams['params'] = $this->encode($renderParams);
+        }
+        if ($preferLatestContent || $this->preferLatestContent) {
+            $requestParams['latest'] = 1;
         }
 
         $action = new Show('render', $snippetId, $requestParams);
@@ -131,7 +150,8 @@ class Snippet extends Service
     {
         $defaults = [
             'params' => null,
-            'ttl'    => null
+            'ttl' => null,
+            'prefer_latest_content' => false
         ];
 
         $results = \array_merge($defaults, $options);

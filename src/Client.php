@@ -19,6 +19,8 @@ class Client
 
     private $cache;
 
+    private $preferLatestContent = false;
+
     private $requests;
 
     private $responses;
@@ -101,6 +103,13 @@ class Client
         return $this;
     }
 
+    public function setPreferLatestContent(bool $preferLatestContent): self
+    {
+        $this->preferLatestContent = $preferLatestContent;
+
+        return $this;
+    }
+
     public function setTtl($ttl): self
     {
         $this->cache = new Cache\Ttl($ttl);
@@ -119,6 +128,9 @@ class Client
      *   @option  int|DateTime  ttl  the default time-to-live when writing
      *     to the cache (optional; if omitted, uses the method's $ttl argument
      *     or the cache's default setting, in that order)
+     *   @option  bool  prefer_latest_content  a flag indicating whether or not
+     *     to prefer the latest content version (optional; if omitted, defaults
+     *     to published content version)
      * @return  void
      */
     private function unpackOptions(array $options): void
@@ -133,6 +145,10 @@ class Client
 
         if (isset($options['ttl'])) {
             $this->setTtl($options['ttl']);
+        }
+
+        if (isset($options['prefer_latest_content'])) {
+            $this->setPreferLatestContent($options['prefer_latest_content']);
         }
     }
 }

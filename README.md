@@ -57,7 +57,7 @@ In an HTML view:
 </body>
 ```
 
-You can also use tags to select a collection of snippets with the `snippets->allRenders()` method:
+You can also use [tags](https://docs.jahuty.com/components/tags) to select a collection of snippets with the `snippets->allRenders()` method:
 
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
@@ -71,23 +71,20 @@ foreach ($renders as $render) {
 
 ## Content versions
 
-Oftentimes, you'd like to render a snippet's _latest_ content in _development_ and its _published_ content in _production_.
-
-This library will render a snippet's _published_ content by default, but you can use the `prefer_latest_content` configuration option to render the _latest_ content instead:
+By default, this library will render a snippet's _published_ content. If you'd like to render the latest _staged_ content instead, you can use the `prefer_latest_content` configuration option at the client or render level:
 
 ```php
+// Prefer the latest content for all renders.
 $jahuty = new \Jahuty\Client('YOUR_API_KEY', [
   'prefer_latest_content' => true
 ]);
 ```
 
-You can also prefer the latest content (or not) for a single render:
-
 ```php
-// Render the _published_ content for all snippets...
+// Use the default published content for all renders.
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
 
-// ... except, render the _latest_ content for this one.
+// And, render the latest content for this one.
 $render = $jahuty->snippets->render(YOUR_SNIPPET_ID, [
   'prefer_latest_content' => true
 ]);
@@ -95,7 +92,7 @@ $render = $jahuty->snippets->render(YOUR_SNIPPET_ID, [
 
 ## Parameters
 
-You can [pass parameters](https://docs.jahuty.com/liquid/parameters) into your renders using the `params` key in the options associative array.
+You can pass [parameters](https://docs.jahuty.com/liquid/parameters) into your renders using the `params` configuration option:
 
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
@@ -147,6 +144,18 @@ $renders = $jahuty->snippets->allRenders('YOUR_TAG', [
 ]);
 ```
 
+## Tracking renders (Unreleased)
+
+You can use the `render()` method's `location` configuration option to report the absolute URL where the snippet is being rendered. This helps your team preview their changes, and it helps you find and replace deprecated snippets.
+
+```php
+$jahuty = new \Jahuty\Client('YOUR_API_KEY');
+
+$render = $jahuty->snippets->render(YOUR_SNIPPET_ID, [
+  'location' => 'https://example.com'
+]);
+```
+
 ## Caching
 
 Caching controls how frequently this library requests content from Jahuty's API.
@@ -161,11 +170,11 @@ By default, Jahuty uses an in-memory cache to avoid requesting the same render m
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
 
-// sends a synchronous API request; caches the result in memory; and, returns
-// the result
+// This call sends a synchronous API request; caches the result in memory; and,
+// returns the resulting render.
 $render1 = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 
-// skips sending an API request and uses the cached value instead
+// This call skips sending an API request and uses the cached render instead.
 $render2 = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 ```
 
@@ -173,19 +182,19 @@ The in-memory cache only persists for the duration of the original request, howe
 
 ### Caching persistently
 
-A persistent cache allows renders to be cached across multiple requests. This reduces the number of synchronous network requests to Jahuty's API and improves your application's average response time.
+A persistent cache allows renders to be cached across multiple requests. This reduces the number of synchronous network requests to Jahuty's API and improves your application's response time.
 
-To configure Jahuty to use your persistent cache, pass a [PSR-16 `CacheInterface`](https://www.php-fig.org/psr/psr-16/) implementation to the client via the `cache` configuration option:
+To configure a persistent cache, pass a [PSR-16 `CacheInterface`](https://www.php-fig.org/psr/psr-16/) implementation to the client via the `cache` configuration option:
 
 ```php
-$jahuty = new \Jahuty\Client('YOUR_API_KEY', ['cache' => $cache]);
+$jahuty = new \Jahuty\Client('YOUR_API_KEY', ['cache' => CACHE_INSTANCE]);
 ```
 
-The persistent cache implementation you choose and configure is up to you. There are many libraries available, and most frameworks provide their own. Any PSR-16 compatible implementation will work.
+The persistent cache implementation you choose and configure is up to you. There are many libraries available, and most frameworks provide their own. Any PSR-16 compatible implementation will do.
 
 ### Expiring
 
-There are three methods for configuring a render's Time to Live (TTL), the amount of time between when a render is stored and when it's considered stale. From lowest-to-highest precedence, they are:
+There are three methods for configuring a render's Time to Live (TTL), the amount of time between when a it is stored and when it's considered stale. From lowest-to-highest precedence, the methods are:
 
 1. configuring your caching implementation,
 1. configuring this library's default TTL, and
@@ -193,16 +202,17 @@ There are three methods for configuring a render's Time to Live (TTL), the amoun
 
 #### Configuring your caching implementation
 
-You can usually configure your caching implementation with a default TTL. If no other TTL is configured, this library will defer to the caching implementation's default TTL.
+You can usually configure your caching implementation with a default TTL. If no other TTL is configured, this library will defer to the caching implementation's default TTL. How exactly you configure this depends on the library you choose.
 
 #### Configuring this library's default TTL
 
 You can configure a default TTL for all of this library's renders by passing an integer number of seconds or a `DateInterval` instance via the client's `ttl` configuration option:
 
 ```php
+// Cache all renders for sixty seconds.
 $jahuty = new \Jahuty\Client('YOUR_API_KEY', [
   'cache' => $cache,
-  'ttl'   => 60  // <- cache all renders for sixty seconds
+  'ttl'   => 60
 ]);
 ```
 
@@ -213,11 +223,12 @@ If this library's default TTL is set, it will take precedence over the default T
 You can configure one render's TTL by passing an integer number of seconds or a `DateInterval` instance via its `ttl` configuration option:
 
 ```php
-// default to the caching implementation's TTL for all renders
+// Use the caching implementation's TTL for all renders.
 $jahuty = new \Jahuty\Client('YOUR_API_KEY', ['cache' => $cache]);
 
+// But, cache this render for 60 seconds.
 $render = $jahuty->snippets->render(1, [
-  'ttl' => 60  // <- except this render
+  'ttl' => 60
 ]);
 ```
 
@@ -230,28 +241,30 @@ By default, this library will cache each render returned by `allRenders()`:
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
 
-// sends a network request, caches each render, and returns the collection
+// This call sends a network request, caches each render, and returns the
+// collection.
 $jahuty->snippets->allRenders('YOUR_TAG');
 
 // ... later in your application
 
-// if this snippet exists in the collection, the cached value will be used
+// If this snippet exists in the previously rendered collection, the cached
+// render will be used.
 $render = $jahuty->snippets->render(YOUR_SNIPPET_ID);
 ```
 
-This is a powerful feature. Using tags and the `allRenders()` method, you can render and cache the content of an entire application with a single network request. Then, any call to `render()` a snippet in the collection will load its content from the cache instead of Jahuty's API.
+This is a powerful feature. By using tags and the `allRenders()` method, you can render and cache the content of an entire application with a single network request.
 
-When `allRenders()` can be called outside your request cycle (e.g., a background job) periodically, you can turn your cache into your content storage mechanism. You can render and cache your dynamic content as frequently as your like without any hit to your application's response time.
+Further, when `allRenders()` can be called periodically outside your request cycle (e.g., in a background job), you can turn your persistent cache into your content storage mechanism. You can render and cache your dynamic content as frequently as your like without any hit to your application's response time.
 
 ### Disabling caching
 
 You can disable caching, even the default in-memory caching, by passing a `ttl` of zero (`0`) or a negative integer (e.g., `-1`) via any of the methods described above. For example:
 
 ```php
-// disable all caching
+// Disable all caching
 $jahuty1 = new \Jahuty\Client('YOUR_API_KEY', ['ttl' => 0]);
 
-// disable caching for this render
+// Disable caching for this render
 $jahuty2 = new \Jahuty\Client('YOUR_API_KEY');
 $jahuty2->snippets->render(1, ['ttl' => 0]);
 ```

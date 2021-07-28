@@ -53,7 +53,7 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $render = $this->jahuty->snippets->render(62, ['params' => $params]);
         $end    = microtime(true);
 
-        $minimum = 25;
+        $minimum = 10;
         $actual  = ($end - $start) * 1000;
 
         $this->assertGreaterThan($minimum, $actual);
@@ -119,7 +119,7 @@ class SystemTest extends \PHPUnit\Framework\TestCase
         $render = $this->jahuty->snippets->render(62, ['params' => $params]);
         $end    = microtime(true);
 
-        $minimum = 25;
+        $minimum = 10;
         $actual  = ($end - $start) * 1000;
 
         $this->assertGreaterThan($minimum, $actual);

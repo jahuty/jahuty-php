@@ -94,6 +94,7 @@ class Snippet extends Service
      *   ttl: int|DateTime  the time-to-live to use when writing to the cache
      *   prefer_latest_content: bool  a flag indicating whether or not to render
      *     the latest content version instead of the published version
+     *   location:  string  the render's current URL
      * }
      * @return  Resource
      */
@@ -102,6 +103,7 @@ class Snippet extends Service
         [
             'ttl' => $ttl,
             'params' => $renderParams,
+            'location' => $location,
             'prefer_latest_content' => $preferLatestContent
         ] = $this->unpackOptions($options);
 
@@ -117,6 +119,9 @@ class Snippet extends Service
         }
         if ($preferLatestContent || $this->preferLatestContent) {
             $requestParams['latest'] = 1;
+        }
+        if ($location) {
+            $requestParams['location'] = $location;
         }
 
         $action = new Show('render', $snippetId, $requestParams);
@@ -151,6 +156,7 @@ class Snippet extends Service
         $defaults = [
             'params' => null,
             'ttl' => null,
+            'location' => null,
             'prefer_latest_content' => false
         ];
 

@@ -15,7 +15,7 @@ It should be installed via [Composer](https://getcomposer.org). To do so, add th
 ```javascript
 {
    "require": {
-       "jahuty/jahuty-php": "^5.3"
+       "jahuty/jahuty-php": "^5.4"
    }
 }
 ```
@@ -71,13 +71,11 @@ foreach ($renders as $render) {
 
 ## Content versions
 
-By default, this library will render a snippet's _published_ content. If you'd like to render the latest _staged_ content instead, you can use the `prefer_latest_content` configuration option at the client or render level:
+By default, this library will render a snippet's _published_ content. If you'd like to render its latest _staged_ content instead, you can use the `prefer_latest` configuration option at the client or render level:
 
 ```php
 // Prefer the latest content for all renders.
-$jahuty = new \Jahuty\Client('YOUR_API_KEY', [
-  'prefer_latest_content' => true
-]);
+$jahuty = new \Jahuty\Client('YOUR_API_KEY', ['prefer_latest' => true]);
 ```
 
 ```php
@@ -85,9 +83,7 @@ $jahuty = new \Jahuty\Client('YOUR_API_KEY', [
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
 
 // And, render the latest content for this one.
-$render = $jahuty->snippets->render(YOUR_SNIPPET_ID, [
-  'prefer_latest_content' => true
-]);
+$render = $jahuty->snippets->render(YOUR_SNIPPET_ID, ['prefer_latest' => true]);
 ```
 
 ## Parameters
@@ -144,7 +140,7 @@ $renders = $jahuty->snippets->allRenders('YOUR_TAG', [
 ]);
 ```
 
-## Tracking renders (Unreleased)
+## Tracking renders
 
 You can use the `render()` method's `location` configuration option to report the absolute URL where a snippet is being rendered. This helps your team preview their changes, and it helps you find and replace deprecated snippets.
 

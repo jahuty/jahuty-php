@@ -36,7 +36,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service->allRenders('foo');
     }
 
-    public function testRendersWhenParamsDoExist(): void
+    public function testAllRendersWithParams(): void
     {
         // the expected action, note the json-encoded params)
         $action = new Index('render', [
@@ -67,7 +67,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testRendersWithLatest(): void
+    public function testAllRendersWithLatest(): void
     {
         // the expected action
         $action = new Index('render', ['tag' => 'foo', 'latest' => 1]);
@@ -88,7 +88,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testRenderReturnsRenderWhenCacheMiss(): void
+    public function testRenderWithCacheMiss(): void
     {
         // the action to request
         $action = new Show('render', 1);
@@ -118,7 +118,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($render, $service->render(1));
     }
 
-    public function testRenderReturnsRenderWhenCacheHit(): void
+    public function testRenderWithCacheHit(): void
     {
         // the cached render
         $render = new Render(1, 'foo');
@@ -136,7 +136,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($render, $service->render(1));
     }
 
-    public function testRenderWhenParamsExist(): void
+    public function testRenderWithParams(): void
     {
         // the expected action, note the json-formatted params
         $action = new Show('render', 1, ['params' => '{"foo":"bar"}']);
@@ -158,7 +158,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service->render(1, ['params' => ['foo' => 'bar']]);
     }
 
-    public function testRenderWhenTllExists(): void
+    public function testRenderWithTll(): void
     {
         $ttl = 60;
 
@@ -185,7 +185,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service->render(1, ['ttl' => $ttl]);
     }
 
-    public function testRenderWhenLatestExists(): void
+    public function testRenderWithLatest(): void
     {
         // the expected action
         $action = new Show('render', 1, ['latest' => 1]);
@@ -205,5 +205,29 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service = new Snippet($client, $cache, new Ttl());
 
         $service->render(1, ['prefer_latest_content' => true]);
+    }
+
+    public function testRenderWithLocation(): void
+    {
+        $location = 'https://example.com';
+
+        // prepare the expected action
+        $action = new Show('render', 1, ['location' => $location]);
+
+        // prepare the render to return
+        $render = new Render(1, 'foo');
+
+        // mock a cache miss
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue($render));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->render(1, ['location' => $location]);
     }
 }

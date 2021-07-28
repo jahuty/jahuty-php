@@ -7,12 +7,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
-- A `location` option to the `render` method, which allows you to report the absolute URL where the snippet is being rendered.
-- The `prefer_latest` configuration option, a similarly intentional but shorter version of the `prefer_latest_content` configuration option.
+- A `location` option has been added to the `render` method, which allows you to report the absolute URL where the snippet is being rendered.
+- A `prefer_latest` configuration option has been added to replace the intentional but verbose `prefer_latest_content` configuration option.
 
-### Changed
+### Deprecated
 
-- Deprecated `prefer_latest_content` configuration option in favor `prefer_latest`.
+- The `prefer_latest_content` configuration option is deprecated in favor of the `prefer_latest` configuration option.
+
+### Fixed
+
+- Fixed [#27](https://github.com/jahuty/jahuty-php/issues/27), where the content version was not considered when fetching renders from the cache.
 
 ## 5.3.0 - 2020-04-27
 

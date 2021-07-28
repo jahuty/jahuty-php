@@ -109,6 +109,13 @@ class ClientTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($client, $client->setPreferLatestContent(true));
     }
 
+    public function testSetPreferLatest(): void
+    {
+        $client = new Client('foo');
+
+        $this->assertSame($client, $client->setPreferLatest(true));
+    }
+
     public function testSetTtl(): void
     {
         $client = new Client('foo');

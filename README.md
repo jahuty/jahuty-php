@@ -146,7 +146,7 @@ $renders = $jahuty->snippets->allRenders('YOUR_TAG', [
 
 ## Tracking renders (Unreleased)
 
-You can use the `render()` method's `location` configuration option to report the absolute URL where the snippet is being rendered. This helps your team preview their changes, and it helps you find and replace deprecated snippets.
+You can use the `render()` method's `location` configuration option to report the absolute URL where a snippet is being rendered. This helps your team preview their changes, and it helps you find and replace deprecated snippets.
 
 ```php
 $jahuty = new \Jahuty\Client('YOUR_API_KEY');
@@ -155,6 +155,10 @@ $render = $jahuty->snippets->render(YOUR_SNIPPET_ID, [
   'location' => 'https://example.com'
 ]);
 ```
+
+Note, locations are only reported when a request is sent to Jahuty's API. As a result, locations will not be reported in some scenarios. For example, if the call to `render()` results in a cache hit, a request will not sent to Jahuty's API, and the location will not be reported.
+
+This configuration option is not supported by the `allRenders()` method.
 
 ## Caching
 

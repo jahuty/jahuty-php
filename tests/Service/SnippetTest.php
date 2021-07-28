@@ -67,7 +67,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         ]);
     }
 
-    public function testAllRendersWithLatest(): void
+    public function testAllRendersWithLatestDeprecated(): void
     {
         // the expected action
         $action = new Index('render', ['tag' => 'foo', 'latest' => 1]);
@@ -86,6 +86,25 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service->allRenders('foo', [
             'prefer_latest_content' => true
         ]);
+    }
+
+    public function testAllRendersWithLatest(): void
+    {
+        // the expected action
+        $action = new Index('render', ['tag' => 'foo', 'latest' => 1]);
+
+        // a no-op cache
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue([]));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->allRenders('foo', ['prefer_latest' => true]);
     }
 
     public function testRenderWithCacheMiss(): void
@@ -185,7 +204,7 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service->render(1, ['ttl' => $ttl]);
     }
 
-    public function testRenderWithLatest(): void
+    public function testRenderWithLatestDeprecated(): void
     {
         // the expected action
         $action = new Show('render', 1, ['latest' => 1]);
@@ -205,6 +224,28 @@ class SnippetTest extends \PHPUnit\Framework\TestCase
         $service = new Snippet($client, $cache, new Ttl());
 
         $service->render(1, ['prefer_latest_content' => true]);
+    }
+
+    public function testRenderWithLatest(): void
+    {
+        // the expected action
+        $action = new Show('render', 1, ['latest' => 1]);
+
+        // the render to return
+        $render = new Render(1, 'foo');
+
+        // a cache miss
+        $cache = $this->createMock(CacheInterface::class);
+
+        $client = $this->createMock(Client::class);
+        $client->expects($this->once())
+            ->method('request')
+            ->with($this->equalTo($action))
+            ->will($this->returnValue($render));
+
+        $service = new Snippet($client, $cache, new Ttl());
+
+        $service->render(1, ['prefer_latest' => true]);
     }
 
     public function testRenderWithLocation(): void

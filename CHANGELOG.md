@@ -8,6 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Added
 
 - A `location` option to the `render` method, which allows you to report the absolute URL where the snippet is being rendered.
+- The `prefer_latest` configuration option, a similarly intentional but shorter version of the `prefer_latest_content` configuration option.
+
+### Changed
+
+- Deprecated `prefer_latest_content` configuration option in favor `prefer_latest`.
 
 ## 5.3.0 - 2020-04-27
 

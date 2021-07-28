@@ -19,7 +19,7 @@ class Client
 
     private $cache;
 
-    private $preferLatestContent = false;
+    private $preferLatest = false;
 
     private $requests;
 
@@ -49,7 +49,8 @@ class Client
             $this->services[$name] = new Service\Snippet(
                 $this,
                 $this->cache,
-                $this->ttl
+                $this->ttl,
+                $this->preferLatest
             );
         }
 
@@ -103,9 +104,17 @@ class Client
         return $this;
     }
 
+    /**
+     * @deprecated  use preferLatest() instead (2020-07-28)
+     */
     public function setPreferLatestContent(bool $preferLatestContent): self
     {
-        $this->preferLatestContent = $preferLatestContent;
+        return $this->setPreferLatest($preferLatestContent);
+    }
+
+    public function setPreferLatest(bool $preferLatest): self
+    {
+        $this->preferLatest = $preferLatest;
 
         return $this;
     }
@@ -130,6 +139,9 @@ class Client
      *     or the cache's default setting, in that order)
      *   @option  bool  prefer_latest_content  a flag indicating whether or not
      *     to prefer the latest content version (optional; if omitted, defaults
+     *     to published content version) (deprecated)
+     *   @option  bool  prefer_latest  a flag indicating whether or not to
+     *     prefer the latest content version (optional; if omitted, defaults
      *     to published content version)
      * @return  void
      */
@@ -147,8 +159,8 @@ class Client
             $this->setTtl($options['ttl']);
         }
 
-        if (isset($options['prefer_latest_content'])) {
-            $this->setPreferLatestContent($options['prefer_latest_content']);
+        if (isset($options['prefer_latest_content']) || isset($options['prefer_latest'])) {
+            $this->setPreferLatest($options['prefer_latest_content'] || $options['prefer_latest']);
         }
     }
 }

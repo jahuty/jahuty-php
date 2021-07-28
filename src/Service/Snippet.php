@@ -59,7 +59,7 @@ class Snippet extends Service
         if ($allParams) {
             $requestParams['params'] = $this->encode($allParams);
         }
-        if ($preferLatest || $this->preferLatest) {
+        if ($preferLatest) {
             $requestParams['latest'] = 1;
         }
 
@@ -75,7 +75,8 @@ class Snippet extends Service
             );
             $cacheKey = $this->getCacheKey(
                 $render->getSnippetId(),
-                $renderParams
+                $renderParams,
+                $preferLatest
             );
             $this->cache->set($cacheKey, $render, $ttl->toSeconds());
         }
@@ -111,7 +112,7 @@ class Snippet extends Service
             'prefer_latest' => $preferLatest
         ] = $this->unpackOptions($options);
 
-        $cacheKey = $this->getCacheKey($snippetId, $renderParams);
+        $cacheKey = $this->getCacheKey($snippetId, $renderParams, $preferLatest);
 
         if (null !== ($render = $this->cache->get($cacheKey))) {
             return $render;
@@ -121,7 +122,7 @@ class Snippet extends Service
         if ($renderParams) {
             $requestParams['params'] = $this->encode($renderParams);
         }
-        if ($preferLatest|| $this->preferLatest) {
+        if ($preferLatest) {
             $requestParams['latest'] = 1;
         }
         if ($location) {
@@ -142,12 +143,16 @@ class Snippet extends Service
         return \json_encode($params, JSON_THROW_ON_ERROR);
     }
 
-    private function getCacheKey(int $snippetId, ?array $params): string
+    private function getCacheKey(int $snippetId, array $params = [], bool $latest = false): string
     {
         $slug = "snippets/{$snippetId}/render";
 
         if ($params) {
             $slug .= "/{$this->encode($params)}";
+        }
+
+        if ($latest) {
+            $slug .= '/latest';
         }
 
         $hash = md5($slug);
@@ -157,28 +162,24 @@ class Snippet extends Service
 
     private function unpackOptions(array $options): array
     {
-        // Handle the deprecated 'prefer_latest_content' option.
+        // Handle the deprecated 'prefer_latest_content' option, if it exists.
         if (\array_key_exists('prefer_latest_content', $options)) {
             $options['prefer_latest'] = $options['prefer_latest_content'];
             unset($options['prefer_latest_content']);
         }
 
-        $defaults = [
-            'params' => null,
-            'ttl' => null,
-            'location' => null,
-            'prefer_latest' => false
-        ];
-
-        $results = \array_merge($defaults, $options);
-
-        $ttl = new Ttl($results['ttl']);
-        if ($ttl->isNull()) {
-            $ttl = $this->ttl;
+        // Wrap a TTL in an object, if it exists.
+        if (\array_key_exists('ttl', $options)) {
+            $options['ttl'] = new Ttl($options['ttl']);
         }
 
-        $results['ttl'] = $ttl;
+        $defaults = [
+            'params' => [],
+            'ttl' => $this->ttl,
+            'location' => null,
+            'prefer_latest' => $this->preferLatest
+        ];
 
-        return $results;
+        return \array_merge($defaults, $options);
     }
 }
